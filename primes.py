@@ -17,14 +17,14 @@ class LargestPrimeIterator():
     def __next__(self):
         new_prime = self.largest_prime(self.upper_bound)
         self.upper_bound = new_prime * self.factor
-
+        
         return new_prime
 
 
     def largest_prime(self, number: int) -> list[int]:
         """ Using the sieve of eratosthenes """
 
-        numbers = list(range(2, number + 1))
+        numbers = list(range(2, number))
 
         for prime_candidate in numbers:
             trial_prime = prime_candidate * prime_candidate
@@ -36,3 +36,10 @@ class LargestPrimeIterator():
                 trial_prime += prime_candidate
         
         return numbers[-1]
+
+def main():
+    prime_iterator = LargestPrimeIterator(6, 2)
+    for _ in range(5):
+        print(next(prime_iterator))
+
+main()
