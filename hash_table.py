@@ -3,10 +3,7 @@
 Defines a Hash Table using Linear Probing for conflict resolution.
 """
 from __future__ import annotations
-from http.cookiejar import CookieJar
 
-from pyparsing import Char
-from sqlalchemy import false
 __author__ = 'Brendon Taylor. Modified by Graeme Gange, Alexey Ignatiev, and Jackson Goerner'
 __docformat__ = 'reStructuredText'
 __modified__ = '21/05/2020'
