@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from material import Material
+from random_gen import RandomGen
 
 # List of cave names from https://en.uesp.net/wiki/Skyrim:Caves. Thanks Skyrim.
 CAVE_NAMES = [
@@ -99,23 +100,47 @@ CAVE_NAMES = [
 class Cave:
     
     def __init__(self, name: str, material: Material, quantity: float=0) -> None:
-        raise NotImplementedError()
+        '''
+        Constructor for Cave
+        Attributes : 
+        1) name
+        2) material 
+        3) quantity of material currently mineable 
+        '''
+        self.name = name
+        self.material = material
+        self.quantity = quantity
     
     def add_quantity(self, amount: float) -> None:
-        raise NotImplementedError()
+        '''
+        Add an amount to the quantity of material
+        '''
+        self.quantity = self.quantity + amount
     
     def remove_quantity(self, amount: float) -> None:
-        raise NotImplementedError()
+        '''
+        Remove an amount from the quantity of material
+        '''
+        self.quantity = self.quantity - amount
 
     def get_quantity(self) -> float:
-        raise NotImplementedError()
+        '''
+        Return the quantity of material 
+        '''
+        return self.quantity
 
     def __str__(self) -> str:
-        raise NotImplementedError()
+        return self.name + " has " + str(self.quantity) + " of " + self.material
 
     @classmethod
     def random_cave(self, material_list: list[Material]) -> Cave:
-        raise NotImplementedError()
+        '''
+        Generate random cave 
+        '''
+        random_name = RandomGen.random_choice(CAVE_NAMES)
+        random_material = RandomGen.random_choice(material_list)
+        random_quantity = RandomGen.randint(1,10) + RandomGen.random_float()
+        return Cave(random_name,random_material,random_quantity)
 
 if __name__ == "__main__":
     print(Cave("Mt Coronet", Material("Coal", 4.5), 3))

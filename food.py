@@ -1,4 +1,5 @@
 from __future__ import annotations
+from random import random
 
 from material import Material
 from random_gen import RandomGen
@@ -93,14 +94,29 @@ FOOD_NAMES = [
 class Food:
     
     def __init__(self, name: str, hunger_bars: int, price: int) -> None:
-        raise NotImplementedError()
+        '''
+        Constructor for Food
+        Attributes :
+        1) name of food
+        2) hunger bars food provides
+        3) price of the food
+        '''
+        self.name = name 
+        self.hunger_bars = hunger_bars 
+        self.price = price
     
     def __str__(self) -> str:
-        raise NotImplementedError()
+        return self.name + " gives " + str(self.hunger_bars) + " hunger bars and costs " + str(self.price)
 
     @classmethod
     def random_food(cls) -> Food:
-        raise NotImplementedError()
+        '''
+        Generate random instance of Food
+        '''
+        random_name = RandomGen.random_choice(FOOD_NAMES)
+        random_hunger_bars = RandomGen.random_choice(50,500)
+        random_price = RandomGen.randint(5,50)
+        return Food(random_name,random_hunger_bars,random_price)
 
 if __name__ == "__main__":
     print(Food.random_food())

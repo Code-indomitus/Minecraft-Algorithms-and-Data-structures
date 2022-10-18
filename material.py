@@ -1,3 +1,4 @@
+from random import Random
 from random_gen import RandomGen
 
 # Material names taken from https://minecraft-archive.fandom.com/wiki/Items
@@ -91,14 +92,26 @@ class Material:
     """
     
     def __init__(self, name: str, mining_rate: float) -> None:
-        raise NotImplementedError()
+        '''
+        Constructor for Material
+        Attributes :
+        1) name
+        2) mining rate
+        '''
+        self.name = name
+        self.mining_rate = mining_rate
     
     def __str__(self) -> str:
-        raise NotImplementedError()
+        return self.name + " with mining rate of " + str(self.mining_rate)
 
     @classmethod
     def random_material(cls):
-        raise NotImplementedError()
+        '''
+        Generate random material 
+        '''
+        random_name = RandomGen.random_choice(RANDOM_MATERIAL_NAMES)
+        random_mining_rate = RandomGen.randint(1,50) + RandomGen.random_float()
+        return Material(random_name,random_mining_rate)
 
 if __name__ == "__main__":
     print(Material("Coal", 4.5))
