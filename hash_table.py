@@ -3,6 +3,7 @@
 Defines a Hash Table using Linear Probing for conflict resolution.
 """
 from __future__ import annotations
+from primes import LargestPrimeIterator
 
 __author__ = 'Brendon Taylor. Modified by Graeme Gange, Alexey Ignatiev, and Jackson Goerner'
 __docformat__ = 'reStructuredText'
@@ -214,11 +215,16 @@ class LinearProbeTable(Generic[T]):
         self.rehashing_count += 1
         self.count = 0
 
-        new_table_size = self.tablesize*2
+        # new_table_size = self.tablesize*2
 
-        while not self.check_prime(new_table_size):
-            new_table_size += 1
-            
+        # while not self.check_prime(new_table_size):
+        #     new_table_size += 1
+
+        prime_iterator = LargestPrimeIterator(self.tablesize,2)
+
+        next_1 = next(prime_iterator)
+        new_table_size = next(prime_iterator)
+
         new_table = ArrayR(new_table_size)
         
         temp = []
