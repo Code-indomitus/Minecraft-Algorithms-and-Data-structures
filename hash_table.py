@@ -215,11 +215,6 @@ class LinearProbeTable(Generic[T]):
         self.rehashing_count += 1
         self.count = 0
 
-        # new_table_size = self.tablesize*2
-
-        # while not self.check_prime(new_table_size):
-        #     new_table_size += 1
-
         prime_iterator = LargestPrimeIterator(self.tablesize,2)
 
         next_1 = next(prime_iterator)
