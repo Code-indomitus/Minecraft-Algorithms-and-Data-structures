@@ -78,7 +78,16 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
             :complexity: O(1)
         """
 
-        raise NotImplementedError()
+        new_root = current.right
+        current.right = new_root.left
+        new_root.left = current
+        
+        #TODO: Missing implementation for updating the heights
+        new_root.height = max(self.get_height(new_root.right), self.get_height(new_root.right)) + 1
+        current.height = max(self.get_height(current.right), self.get_height(current.right)) + 1
+
+
+        return new_root
 
     def right_rotate(self, current: AVLTreeNode) -> AVLTreeNode:
         """
@@ -97,7 +106,15 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
             :complexity: O(1)
         """
 
-        raise NotImplementedError()
+        new_root = current.left
+        current.left = new_root.right
+        new_root.right = current
+        
+        #TODO: Missing implementation for updating the heights
+        new_root.height = max(self.get_height(new_root.right), self.get_height(new_root.right)) + 1
+        current.height = max(self.get_height(current.right), self.get_height(current.right)) + 1
+
+        return new_root
 
 
     def rebalance(self, current: AVLTreeNode) -> AVLTreeNode:
