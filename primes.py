@@ -21,7 +21,7 @@ class LargestPrimeIterator():
         return new_prime
 
 
-    def largest_prime(self, number: int) -> list[int]:
+    def largest_prime(self, number: int) -> int:
         """ Using the sieve of eratosthenes """
 
         numbers = list(range(2, number))
@@ -36,10 +36,3 @@ class LargestPrimeIterator():
                 trial_prime += prime_candidate
         
         return numbers[-1]
-
-def main():
-    prime_iterator = LargestPrimeIterator(6, 2)
-    for _ in range(5):
-        print(next(prime_iterator))
-
-main()
