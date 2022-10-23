@@ -9,30 +9,28 @@ Project Repository for use in Assignment 3
 - Rachit Bhatia (rbha0031@student.monash.edu)
 - Shyam Kamalesh Borkar (sbor0018@student.monash.edu)
 
-## Implement the code!
+## Implement the Set up!
+- [ ] hash_table.py
+- [ ] primes.py
+- [ ] bst.py
+- [ ] avl.py
 
-- [X] Create the repository
-- [ ] Task 1
-- [ ] Task 2
-- [ ] Task 3
-- [ ] Task 4
-- [ ] Task 5
-- [ ] Task 6
+## Implement the Game!
+- [ ] trader.py
+- [ ] player.py
+- [ ] material.py
+- [ ] cave.py
+- [ ] game.py
 
-## Carry out Testing!
-- [ ] Task 1
-- [ ] Task 2
-- [ ] Task 3
-- [ ] Task 4
-- [ ] Task 5
-- [ ] Task 6
 
 ## Complete Documentation!
-- [ ] Task 1
-- [ ] Task 2
-- [ ] Task 3
-- [ ] Task 4
-- [ ] Task 5
-- [ ] Task 6
-
+- [ ] hash_table.py
+- [ ] primes.py
+- [ ] bst.py
+- [ ] avl.py
+- [ ] trader.py
+- [ ] player.py
+- [ ] material.py
+- [ ] cave.py
+- [ ] game.py
 
