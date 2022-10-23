@@ -179,9 +179,15 @@ class BinarySearchTree(Generic[K, I]):
             larger keys.
             If no such node exists, then none should be returned.
         """
-        if (current is None) or (current.right is None):
-            return current
-        return self.get_minimal(current.right)
+        
+        if current.right is None:
+            return None
+
+        successor = current.right
+        while successor.left is not None:
+            successor = successor.left
+        
+        return successor
 
     def get_minimal(self, current: TreeNode) -> TreeNode:
         """
