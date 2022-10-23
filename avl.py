@@ -82,7 +82,6 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         current.right = new_root.left
         new_root.left = current
         
-        #TODO: Missing implementation for updating the heights
         new_root.height = max(self.get_height(new_root.right), self.get_height(new_root.right)) + 1
         current.height = max(self.get_height(current.right), self.get_height(current.right)) + 1
 
@@ -110,7 +109,6 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         current.left = new_root.right
         new_root.right = current
         
-        #TODO: Missing implementation for updating the heights
         new_root.height = max(self.get_height(new_root.right), self.get_height(new_root.right)) + 1
         current.height = max(self.get_height(current.right), self.get_height(current.right)) + 1
 
