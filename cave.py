@@ -107,6 +107,13 @@ class Cave:
         2) material 
         3) quantity of material currently mineable 
         '''
+        if name not in CAVE_NAMES:
+            raise ValueError("Invalid Cave Name!")
+        if not type(material) == Material:
+            raise TypeError("Parameter material must be an object of Material class")
+        if not type(quantity) == float or not type(quantity) == int:
+            raise TypeError("Quantity must be either a float or an integer!")
+
         self.name = name
         self.material = material
         self.quantity = quantity
