@@ -114,3 +114,11 @@ class TestBST(unittest.TestCase):
             array = [key for key in tree]  # using out treesort
 
             self.assertEqual(array, sorted_array, 'In-Order traversal produces a wrong order: {0}'.format(array))
+
+
+if __name__ == '__main__':
+    # seeding the pseudo-random generator
+    random.seed(16)
+
+    # running all the tests
+    unittest.main()
