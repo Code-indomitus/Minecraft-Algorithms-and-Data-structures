@@ -46,20 +46,65 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
             return 0
         return self.get_height(current.right) - self.get_height(current.left)
 
+    #TODO: Documentation
     def insert_aux(self, current: AVLTreeNode, key: K, item: I) -> AVLTreeNode:
         """
-            Attempts to insert an item into the tree, it uses the Key to insert it
-            
+            Attempts to insert an item into the AVL tree, it uses the Key to insert it. Rebalancing is done after
         """
-        raise NotImplementedError()
+        if current is None:  # base case: at the leaf
+            current = AVLTreeNode(key, item)
+            self.length += 1
+        elif key < current.key:
+            current.left = self.insert_aux(current.left, key, item)
+        elif key > current.key:
+            current.right = self.insert_aux(current.right, key, item)
+        else:  # key == current.key
+            raise ValueError('Inserting duplicate item')
 
+        current = self.rebalance(current)
+
+        # update the height of current
+        current.height = max(self.get_height(current.left), self.get_height(current.right)) + 1
+
+        return current
+
+    #TODO: Documentation
     def delete_aux(self, current: AVLTreeNode, key: K) -> AVLTreeNode:
         """
             Attempts to delete an item from the tree, it uses the Key to
             determine the node to delete.
         """
 
-        raise NotImplementedError()
+        if current is None:  # key not found
+            raise ValueError('Deleting non-existent item')
+        elif key < current.key:
+            current.left  = self.delete_aux(current.left, key)
+        elif key > current.key:
+            current.right = self.delete_aux(current.right, key)
+        else:  # we found our key => do actual deletion
+            if self.is_leaf(current):
+                self.length -= 1
+                return None
+            elif current.left is None:
+                self.length -= 1
+                return current.right
+            elif current.right is None:
+                self.length -= 1
+                return current.left
+
+            # general case => find a successor
+            succ = self.get_successor(current)
+            current.key  = succ.key
+            current.item = succ.item
+            current.right = self.delete_aux(current.right, succ.key)
+
+        
+        current = self.rebalance(current)
+
+        # update the height of current
+        current.height = max(self.get_height(current.left), self.get_height(current.right)) + 1
+
+        return current
 
     def left_rotate(self, current: AVLTreeNode) -> AVLTreeNode:
         """
@@ -82,8 +127,8 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         current.right = new_root.left
         new_root.left = current
         
-        new_root.height = max(self.get_height(new_root.right), self.get_height(new_root.right)) + 1
-        current.height = max(self.get_height(current.right), self.get_height(current.right)) + 1
+        new_root.height = max(self.get_height(new_root.right), self.get_height(new_root.left)) + 1
+        current.height = max(self.get_height(current.right), self.get_height(current.left)) + 1
 
 
         return new_root
@@ -109,8 +154,8 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         current.left = new_root.right
         new_root.right = current
         
-        new_root.height = max(self.get_height(new_root.right), self.get_height(new_root.right)) + 1
-        current.height = max(self.get_height(current.right), self.get_height(current.right)) + 1
+        new_root.height = max(self.get_height(new_root.right), self.get_height(new_root.left)) + 1
+        current.height = max(self.get_height(current.right), self.get_height(current.left)) + 1
 
         return new_root
 
@@ -138,7 +183,8 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
             return self.right_rotate(current)
 
         return current
-
+        
+    #TODO: Documentation
     def range_between(self, i: int, j: int) -> List:
         """
         Returns a sorted list of all elements in the tree between the ith and jth indices, inclusive.
