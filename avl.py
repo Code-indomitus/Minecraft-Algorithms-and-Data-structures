@@ -200,7 +200,7 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         
         if current:
             sorted_list = self.in_order(current.left)
-            sorted_list.append(current.key)
+            sorted_list.append(current.item)
             sorted_list = sorted_list + self.in_order(current.right)
         return sorted_list
 
