@@ -229,6 +229,7 @@ class LinearProbeTable(Generic[T]):
                 temp.append(item)
 
         self.table = new_table
+        self.tablesize = new_table_size
 
         for data in temp :
             if data is not None:
