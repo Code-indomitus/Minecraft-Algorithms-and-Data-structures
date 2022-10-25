@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from abc import abstractmethod, ABC
+
+from avl import AVLTree
 from material import Material
 from random_gen import RandomGen
 
@@ -71,45 +73,112 @@ TRADER_NAMES = [
 class Trader(ABC):
     
     def __init__(self, name: str) -> None:
-        raise NotImplementedError()
-
+        self.name = name
+        self.inventory = AVLTree() # unsure what to use
+        self.active_deal = None
+        self.trader_type = None
+ 
     @classmethod
-    def random_trader(cls):
-        raise NotImplementedError()
+    def random_trader(cls) -> Trader:
+        '''
+        Generate random instance of Food
+        '''
+        random_name = RandomGen.random_choice(TRADER_NAMES)
+        return Trader(random_name)
     
+    # @abstractmethod
     def set_all_materials(self, mats: list[Material]) -> None:
-        raise NotImplementedError()
+        # for material in mats:
+        #     self.inventory.add(material)
+        pass
     
     def add_material(self, mat: Material) -> None:
-        raise NotImplementedError()
+        self.inventory[mat.mining_rate] = mat
+    
+    def remove_material(self, mat: Material) -> None:
+        del self.inventory[mat.mining_rate]
     
     def is_currently_selling(self) -> bool:
-        raise NotImplementedError()
+        if self.active_deal is None:
+            return False
+        else:
+            return True
 
     def current_deal(self) -> tuple[Material, float]:
-        raise NotImplementedError()
-    
+        if self.active_deal is None:
+            raise ValueError()
+        return self.active_deal
+
+    @abstractmethod
     def generate_deal(self) -> None:
-        raise NotImplementedError()
+        pass
+
+    def generate_price(self) -> float:
+        return round(2 + 8 * RandomGen.random_float(), 2)
 
     def stop_deal(self) -> None:
-        raise NotImplementedError()
-    
+        self.active_deal = None
+
     def __str__(self) -> str:
-        raise NotImplementedError()
+        if not self.is_currently_selling():
+            result  = "<{}: {} not currently buying>".format(self.trader_type, self.name)
+        else:
+            material = self.active_deal[0]
+            price = self.active_deal[1]
+            result = "<{}: {} buying [{}: {}🍗/💎] for {}💰>".format(self.trader_type, self.name, material.name, material.mining_rate, price)
+        
+        return result
 
 class RandomTrader(Trader):
+    def __init__(self, name: str) -> None:
+        Trader.__init__(self, name)
+        self.trader_type = "RandomTrader"
     
-    pass
+    def set_all_materials(self, mats: list[Material]) -> None:
+        pass
+
+    def generate_deal(self) -> None:
+        material_list = self.inventory.range_between(0, len(self.inventory) - 1)
+        material = RandomGen.random_choice(material_list)
+        price = self.generate_price()
+        self.active_deal = (material, price)
+    
 
 class RangeTrader(Trader):
-    
+    def __init__(self, name: str) -> None:
+        Trader.__init__(self, name)
+        self.trader_type = "RangeTrader"
+   
+    def set_all_materials(self, mats: list[Material]) -> None:
+        pass
+
+    def generate_deal(self) -> None:
+        
+        i = RandomGen.randint(1, len(self.inventory))
+        j = RandomGen.randint(i - 1, len(self.inventory))
+
+        material_list = self.materials_between(i - 1, j) # i starts from 1
+        material = RandomGen.random_choice(material_list)
+        price = self.generate_price()
+        self.active_deal = (material, price)
+
     def materials_between(self, i: int, j: int) -> list[Material]:
-        raise NotImplementedError()
+        return self.inventory.range_between(i, j)
 
 class HardTrader(Trader):
-    
-    pass
+    def __init__(self, name: str) -> None:
+        Trader.__init__(self, name)
+        self.trader_type = "HardTrader"
+
+    def set_all_materials(self, mats: list[Material]) -> None:
+        pass
+
+    def generate_deal(self) -> None:
+        material_list = self.inventory.range_between(0, len(self.inventory) - 1)
+        material = material_list[-1]
+        self.remove_material(material)
+        price = self.generate_price()
+        self.active_deal = (material, price)
 
 if __name__ == "__main__":
     trader = RangeTrader("Jackson")
