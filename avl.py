@@ -183,12 +183,24 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
             return self.right_rotate(current)
 
         return current
-        
-    #TODO: Documentation
+
+    #TODO: Documentation and complexity is not fulfilled for implementation
     def range_between(self, i: int, j: int) -> List:
         """
         Returns a sorted list of all elements in the tree between the ith and jth indices, inclusive.
         
         :complexity ...
         """
-        raise NotImplementedError()
+
+        sorted_list = self.in_order(self.root)
+        return sorted_list[i:j + 1]
+
+    def in_order(self, current: AVLTreeNode) -> List:
+        sorted_list = []
+        
+        if current:
+            sorted_list = self.in_order(current.left)
+            sorted_list.append(current.key)
+            sorted_list = sorted_list + self.in_order(current.right)
+        return sorted_list
+
