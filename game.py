@@ -1,4 +1,6 @@
 from __future__ import annotations
+from ast import Constant
+from constants import EPSILON
 
 from player import Player
 from trader import Trader
@@ -21,8 +23,12 @@ class Game:
     MIN_FOOD = 2
     MAX_FOOD = 5
 
+
+
     def __init__(self) -> None:
-        raise NotImplementedError()
+        self.materials = None
+        self.caves = None
+        self.traders = None
 
     def initialise_game(self) -> None:
         """Initialise all game objects: Materials, Caves, Traders."""
@@ -45,22 +51,22 @@ class Game:
         self.set_traders(traders)
 
     def set_materials(self, mats: list[Material]) -> None:
-        raise NotImplementedError()
+        self.materials = mats
 
     def set_caves(self, caves: list[Cave]) -> None:
-        raise NotImplementedError()
+        self.caves = caves
 
     def set_traders(self, traders: list[Trader]) -> None:
-        raise NotImplementedError()
+        self.traders = traders
 
     def get_materials(self) -> list[Material]:
-        raise NotImplementedError()
+        return self.materials
 
     def get_caves(self) -> list[Cave]:
-        raise NotImplementedError()
+        return self.caves
 
     def get_traders(self) -> list[Trader]:
-        raise NotImplementedError()
+        return self.traders
 
     def generate_random_materials(self, amount):
         """
@@ -68,7 +74,18 @@ class Game:
         Generated materials must all have different names and different mining_rates.
         (You may have to call Material.random_material more than <amount> times.)
         """
-        raise NotImplementedError()
+        while len(self.materials) < amount:
+            new_material = Material.random_material()
+            similar_material = False 
+
+            for material in self.materials:
+                if (new_material.name == material.name) or (abs(new_material.mining_rate - material.mining_rate) < EPSILON):
+                    similar_material = True
+                    break
+            
+            if not similar_material:
+                self.materials.append(new_material)
+
 
     def generate_random_caves(self, amount):
         """
@@ -76,7 +93,17 @@ class Game:
         Generated caves must all have different names
         (You may have to call Cave.random_cave more than <amount> times.)
         """
-        raise NotImplementedError()
+        while len(self.caves) < amount:
+            new_cave = Cave.random_cave()
+            similar_cave = False 
+
+            for cave in self.caves:
+                if (new_cave.name == cave.name):
+                    similar_cave = True
+                    break
+            
+            if not similar_cave:
+                self.caves.append(new_cave)
 
     def generate_random_traders(self, amount):
         """
@@ -118,7 +145,10 @@ class SoloGame(Game):
 
     def simulate_day(self):
         # 1. Traders make deals
-        raise NotImplementedError()
+
+        #raise NotImplementedError() #TODO: REMOVE THIS
+
+
         print("Traders Deals:\n\t", end="")
         print("\n\t".join(map(str, self.get_traders())))
         # 2. Food is offered
@@ -146,6 +176,7 @@ class MultiplayerGame(Game):
     def __init__(self) -> None:
         super().__init__()
         self.players = []
+        #FIXME: Do I change this list?
 
     def initialise_game(self) -> None:
         super().initialise_game()
@@ -174,7 +205,7 @@ class MultiplayerGame(Game):
 
     def simulate_day(self):
         # 1. Traders make deals
-        raise NotImplementedError()
+        #raise NotImplementedError() #TODO: Remove this
         print("Traders Deals:\n\t", end="")
         print("\n\t".join(map(str, self.get_traders())))
         # 2. Food is offered
