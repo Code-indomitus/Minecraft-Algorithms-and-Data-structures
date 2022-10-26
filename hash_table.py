@@ -86,6 +86,8 @@ class LinearProbeTable(Generic[T]):
             value = (ord(char) + a*value) % self.tablesize
             a = a*b %(self.tablesize-1)
 
+        return value
+
     def statistics(self) -> tuple:
         return (self.conflict,self.total_distance_probed,self.length_longest_probe,self.rehashing_count)
 
@@ -222,6 +224,7 @@ class LinearProbeTable(Generic[T]):
     def _rehash(self) -> None:
         """
             Need to resize table and reinsert all values
+            Time complexity : Best = Worst = O(len(self.table) + len(self.table) + next() ) 
         """
         self.rehashing_count += 1
         self.count = 0
