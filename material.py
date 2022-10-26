@@ -126,7 +126,11 @@ class Material:
 
 
     def set_current_best_price_for_sold(self,value):
-        self.current_best_price_for_sold = value
+        if self.current_best_price_for_sold is None:
+            self.current_best_price_for_sold = value
+        else:
+            if abs(value) > self.current_best_price_for_sold :
+                self.current_best_price_for_sold = value
 
     def get_current_best_price_for_sold(self):
         return self.current_best_price_for_sold

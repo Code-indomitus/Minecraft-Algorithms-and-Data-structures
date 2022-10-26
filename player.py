@@ -109,7 +109,6 @@ class Player():
         self.food_list = None
         self.materials_list = None
         self.caves_list = None 
-        self.traders_list_best_deal = None
 
     def set_traders(self, traders_list: list[Trader]) -> None:
         '''
@@ -117,26 +116,6 @@ class Player():
         Time Complexity : Best Case = Worst Case = O(len(self.traders_list)*len(temp_traders_list_greatest_deal) + len(traders_list_best_deal))
         '''
         self.traders_list = traders_list
-
-        temp_traders_list_greatest_deal=[]
-
-        # Find any traders that are buying the same material. Only the trader with a higher buying price of the same material will be added to the traders_list_best_deal
-        for i in range(len(self.traders_list)):
-            same_offer = False
-            for j in range(len(temp_traders_list_greatest_deal)) :
-                if self.traders_list[i].current_deal()[0] == temp_traders_list_greatest_deal[j].current_deal()[0] : # If any traders are offering the same item , check which deal is better 
-                    if self.traders_list[i].current_deal()[1] >= temp_traders_list_greatest_deal[j].current_deal()[1] :
-                        temp_traders_list_greatest_deal[j] = self.traders_list[i] 
-                    same_offer = True
-            
-            if same_offer == False :
-                temp_traders_list_greatest_deal.append(self.traders_list[i])
-
-        self.traders_list_best_deal = temp_traders_list_greatest_deal
-
-        # Set the best price for sold of each material after checking through the deals offered by all the traders
-        for trader in self.traders_list_best_deal :
-            trader.current_deal()[0].set_current_best_price_for_sold(trader.current_deal()[1])
 
     
     def set_foods(self, foods_list: list[Food]) -> None:
@@ -176,12 +155,14 @@ class Player():
         caves_selected = []    
 
         # Find the emerald per hunger bar of each material .This is to identify which are the better caves to go for mining 
-        for traders in self.traders_list_best_deal: # O(T)
+        for traders in self.traders_list: # O(T)
             current_deal = traders.current_deal() 
             trader_material = current_deal[0]
             material_price = current_deal[1]
 
-            emerald_per_hunger_bar = material_price / trader_material.get_mining_rate() 
+            trader_material.set_current_best_price_for_sold(material_price)
+
+            emerald_per_hunger_bar = trader_material.get_current_best_price_for_sold() / trader_material.get_mining_rate() 
 
             trader_material.set_emerald_per_hunger_bar(emerald_per_hunger_bar)
 
