@@ -79,18 +79,18 @@ class Trader(ABC):
         self.trader_type = None
  
     @classmethod
+    @abstractmethod
     def random_trader(cls) -> Trader:
         '''
-        Generate random instance of Food
+        Generate random instance of Trader
         '''
-        random_name = RandomGen.random_choice(TRADER_NAMES)
-        return Trader(random_name)
+        pass
     
     # @abstractmethod
     def set_all_materials(self, mats: list[Material]) -> None:
-        # for material in mats:
-        #     self.inventory.add(material)
-        pass
+        self.inventory = AVLTree()
+        for material in mats:
+            self.add_material(material)
     
     def add_material(self, mat: Material) -> None:
         self.inventory[mat.mining_rate] = mat
@@ -134,8 +134,8 @@ class RandomTrader(Trader):
         Trader.__init__(self, name)
         self.trader_type = "RandomTrader"
     
-    def set_all_materials(self, mats: list[Material]) -> None:
-        pass
+    # def set_all_materials(self, mats: list[Material]) -> None:
+    #     pass
 
     def generate_deal(self) -> None:
         material_list = self.inventory.range_between(0, len(self.inventory) - 1)
@@ -143,14 +143,21 @@ class RandomTrader(Trader):
         price = self.generate_price()
         self.active_deal = (material, price)
     
+    @classmethod
+    def random_trader(cls) -> Trader:
+        '''
+        Generate random instance of Random Trader
+        '''
+        random_name = RandomGen.random_choice(TRADER_NAMES)
+        return RandomTrader(random_name)
 
 class RangeTrader(Trader):
     def __init__(self, name: str) -> None:
         Trader.__init__(self, name)
         self.trader_type = "RangeTrader"
    
-    def set_all_materials(self, mats: list[Material]) -> None:
-        pass
+    # def set_all_materials(self, mats: list[Material]) -> None:
+    #     pass
 
     def generate_deal(self) -> None:
         
@@ -164,14 +171,22 @@ class RangeTrader(Trader):
 
     def materials_between(self, i: int, j: int) -> list[Material]:
         return self.inventory.range_between(i, j)
+    
+    @classmethod
+    def random_trader(cls) -> Trader:
+        '''
+        Generate random instance of Random Trader
+        '''
+        random_name = RandomGen.random_choice(TRADER_NAMES)
+        return RangeTrader(random_name)
 
 class HardTrader(Trader):
     def __init__(self, name: str) -> None:
         Trader.__init__(self, name)
         self.trader_type = "HardTrader"
 
-    def set_all_materials(self, mats: list[Material]) -> None:
-        pass
+    # def set_all_materials(self, mats: list[Material]) -> None:
+    #     pass
 
     def generate_deal(self) -> None:
         material_list = self.inventory.range_between(0, len(self.inventory) - 1)
@@ -179,6 +194,14 @@ class HardTrader(Trader):
         self.remove_material(material)
         price = self.generate_price()
         self.active_deal = (material, price)
+    
+    @classmethod
+    def random_trader(cls) -> Trader:
+        '''
+        Generate random instance of Random Trader
+        '''
+        random_name = RandomGen.random_choice(TRADER_NAMES)
+        return HardTrader(random_name)
 
 if __name__ == "__main__":
     trader = RangeTrader("Jackson")
