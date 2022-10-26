@@ -224,6 +224,7 @@ class BinarySearchTree(Generic[K, I]):
     def find_max_and_remove(self):
         '''
         Find the node with the maximum key and delete that node before returning it
+        Used in : select_food_and_cave method of Player class
         '''
         return self.find_max_and_remove_aux(self.root)
 
@@ -237,7 +238,7 @@ class BinarySearchTree(Generic[K, I]):
             return None
         else:
             if current.right is None:
-                self.__delitem__(current.key)
+                del self[current.key]
                 return current
             else:
                 return self.find_max_and_remove_aux(current.right)

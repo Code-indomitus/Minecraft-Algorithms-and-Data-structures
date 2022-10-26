@@ -176,7 +176,7 @@ class Player():
         caves_selected = []    
 
         # Find the emerald per hunger bar of each material .This is to identify which are the better caves to go for mining 
-        for traders in self.traders_list_best_deal: #O(T)
+        for traders in self.traders_list_best_deal: # O(T)
             current_deal = traders.current_deal() 
             trader_material = current_deal[0]
             material_price = current_deal[1]
@@ -197,11 +197,10 @@ class Player():
             # emerald per hunger bar of material
             for cave in self.caves_list : # O(C)    
                 try:          
-                    temp_avl.__setitem__(cave.material.get_emerald_per_hunger_bar(),cave) # O(log C)
-                except ValueError:
-                    temp_avl.__setitem__(cave.material.get_emerald_per_hunger_bar() + 0.000001,cave)  # O(log C)
+                    temp_avl[cave.material.get_emerald_per_hunger_bar()] = cave  # O(log C)
 
-        
+                except ValueError:
+                    temp_avl[cave.material.get_emerald_per_hunger_bar() + 00000.1] = cave # O(log C)
 
             # Retrive the caves in order starting from the cave that has the material of the highest emerald per hunger bar value. 
             for cave in self.caves_list :# O(C)
@@ -233,6 +232,8 @@ class Player():
                 else :
                     break
             
+
+            # The most optimal solution
             if abs(temp_balance) > balance - EPSILON :
                 food_selected = food
                 balance = temp_balance
