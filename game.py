@@ -1,9 +1,9 @@
 from __future__ import annotations
-from ast import Constant
 from constants import EPSILON
+from hash_table import LinearProbeTable
 
 from player import Player
-from trader import Trader
+from trader import HardTrader, RandomTrader, RangeTrader, Trader
 from material import Material
 from cave import Cave
 from food import Food
@@ -26,8 +26,11 @@ class Game:
 
 
     def __init__(self) -> None:
+        #TODO
+        #is this supposed to be a hash table?
+        #but getters return a list
         self.materials = None
-        self.caves = None
+        self.caves = None  
         self.traders = None
 
     def initialise_game(self) -> None:
@@ -105,6 +108,7 @@ class Game:
             if not similar_cave:
                 self.caves.append(new_cave)
 
+
     def generate_random_traders(self, amount):
         """
         Generates <amount> random traders by selecting a random trader class
@@ -113,7 +117,41 @@ class Game:
         Generated traders must all have different names
         (You may have to call <TraderClass>.random_trader() more than <amount> times.)
         """
-        raise NotImplementedError()
+
+        while len(self.traders) < amount:
+            similar_trader = False
+            trader_type_number = RandomGen.randint(1,3)
+            
+            if trader_type_number == 1:
+                new_trader = self.random_traders_setup(RandomTrader)
+
+            elif trader_type_number == 2:
+                new_trader = self.random_traders_setup(RangeTrader)
+
+            elif trader_type_number == 3:
+                new_trader = self.random_traders_setup(HardTrader)
+
+            for trader in self.traders:
+                if (new_trader.name == trader.name):
+                    similar_trader = True
+                    break
+            
+            if not similar_trader:
+                self.traders.append(new_trader)
+
+
+    def random_traders_setup(self, trader_type):
+
+        new_trader = trader_type.random_trader()
+        RandomGen.random_shuffle(self.materials)
+
+        mats_subset_length = RandomGen.randint(1,len(self.materials))
+        mats_subset = self.materials[:mats_subset_length]
+        new_trader.set_all_materials(mats_subset)
+
+        return new_trader
+
+
 
     def finish_day(self):
         """
