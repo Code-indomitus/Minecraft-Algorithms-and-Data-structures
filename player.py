@@ -208,7 +208,7 @@ class Player():
                 # if the hunger_bar of the player is still not yet 0 , the day continues 
                 if abs(temp_hunger_bars) > 0 - EPSILON :
                     
-                    # Retrieve the cave with the highest emerald per hunger bar value
+                    # Retrieve the cave with the material of the highest emerald per hunger bar value
                     current_cave_selected = temp_avl.find_max_and_remove().item # O(log C)
 
                     material_in_cave = current_cave_selected.material
