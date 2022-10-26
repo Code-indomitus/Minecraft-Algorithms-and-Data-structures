@@ -113,7 +113,7 @@ class Player():
     def set_traders(self, traders_list: list[Trader]) -> None:
         '''
         Set the traders to the traders_list and also find the best deal among all the traders that are buying the same item.
-        Time Complexity : Best Case = Worst Case = O(len(self.traders_list)*len(temp_traders_list_greatest_deal) + len(traders_list_best_deal))
+        Time Complexity : Best Case = Worst Case = O(1)
         '''
         self.traders_list = traders_list
 
