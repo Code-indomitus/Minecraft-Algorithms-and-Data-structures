@@ -223,3 +223,26 @@ class BinarySearchTree(Generic[K, I]):
         else:
             real_prefix = prefix[:-2] + final
             print('{0}'.format(real_prefix), file=to)
+
+    
+
+    def find_max_and_remove(self):
+        '''
+        Find the node with the maximum key and delete that node before returning it
+        '''
+        return self.find_max_and_remove_aux(self.root)
+
+    def find_max_and_remove_aux(self,current: TreeNode):
+        '''
+        Time complexity : Worst: O(Depth) + O(delete) where O(delete) is also O(Depth). Thus, worst-case complexity is O(Depth)
+                          Best: O(1)
+        '''
+        
+        if current is None:
+            return None
+        else:
+            if current.right is None:
+                self.__delitem__(current.key)
+                return current
+            else:
+                return self.find_max_and_remove_aux(current.right)

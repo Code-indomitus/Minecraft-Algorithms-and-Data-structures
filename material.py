@@ -100,6 +100,8 @@ class Material:
         '''
         self.name = name
         self.mining_rate = mining_rate
+        self.current_best_price_for_sold = None
+        self.emerald_per_hunger_bar = None
     
     def __str__(self) -> str:
         return self.name + " with mining rate of " + str(self.mining_rate)
@@ -112,6 +114,22 @@ class Material:
         random_name = RandomGen.random_choice(RANDOM_MATERIAL_NAMES)
         random_mining_rate = RandomGen.randint(1,50) + RandomGen.random_float()
         return Material(random_name,random_mining_rate)
+
+    def get_mining_rate(self):
+        return self.mining_rate
+
+    def set_emerald_per_hunger_bar(self,value):
+        self.emerald_per_hunger_bar = value
+        
+    def get_emerald_per_hunger_bar(self):
+        return self.emerald_per_hunger_bar
+
+
+    def set_current_best_price_for_sold(self,value):
+        self.current_best_price_for_sold = value
+
+    def get_current_best_price_for_sold(self):
+        return self.current_best_price_for_sold
 
 if __name__ == "__main__":
     print(Material("Coal", 4.5))
