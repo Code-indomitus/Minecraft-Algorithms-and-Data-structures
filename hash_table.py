@@ -27,6 +27,9 @@ class LinearProbeTable(Generic[T]):
     """
 
     def check_prime(self,num : int) -> bool:
+        '''
+        Function to check if the num is prime . Returns True or False
+        '''
         if num > 1:
         # Iterate from 2 to n / 2
             for i in range(2, int(num/2)+1):
@@ -47,19 +50,24 @@ class LinearProbeTable(Generic[T]):
         self.count = 0
         self.tablesize = None
 
+        
         if tablesize_override == -1 :
+            # if expected_size is prime number, set the table_size to expected_size
             if self.check_prime(expected_size) :
                 self.tablesize = expected_size
-            else :
+            # if expected_size is not prime number
+            else : 
+                # Increment the expected_size by 1 untill it becomes a prime number then only set it as the table_size
                 while not self.check_prime(expected_size):
                     expected_size += 1
                 self.tablesize = expected_size    
         else : 
+            # Set the table_size to tablesize_override if tablesize_override is not -1
             self.tablesize = tablesize_override
         
         self.table = ArrayR(self.tablesize)
 
-
+        
         self.conflict = 0   
         self.total_distance_probed = 0
         self.length_longest_probe = 0
@@ -69,6 +77,7 @@ class LinearProbeTable(Generic[T]):
     def hash(self, key: str) -> int:
         """
             Hash a key for insertion into the hashtable.
+            Time complexity : Best Case = Worst Case = O(len(key))
         """
         value = 0
         a = 31415
@@ -121,7 +130,8 @@ class LinearProbeTable(Generic[T]):
 
                     self.total_distance_probed += 1
                     distance_probed_current += 1
-
+                    
+                    # Find the longest distance probed 
                     if distance_probed_current > self.length_longest_probe :
                         self.length_longest_probe = distance_probed_current
 
@@ -177,6 +187,7 @@ class LinearProbeTable(Generic[T]):
             :see: #self.__contains__(key: str)
         """
 
+        # Rehash the table if the the number of items in the hash table is greater than half of its capacity
         if self.count > ( self.tablesize // 2):
             self._rehash()
         
@@ -215,15 +226,15 @@ class LinearProbeTable(Generic[T]):
         self.rehashing_count += 1
         self.count = 0
 
+        # Find the next biggest prime number with the upper bound of twice the value of the current table size 
         prime_iterator = LargestPrimeIterator(self.tablesize,2)
-
         next_1 = next(prime_iterator)
         new_table_size = next(prime_iterator)
 
         new_table = ArrayR(new_table_size)
         
         temp = []
-
+        # Copy all the items from the previous hash table to temp array
         for item in self.table:
             if item is not None:
                 temp.append(item)
@@ -231,6 +242,7 @@ class LinearProbeTable(Generic[T]):
         self.table = new_table
         self.tablesize = new_table_size
 
+        # Insert back all the items from the previous hash table to the new hash table after resizing 
         for data in temp :
             if data is not None:
                 self[data[0]] = data[1]
