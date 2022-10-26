@@ -7,6 +7,7 @@ from cave import Cave
 from heap import MaxHeap
 from material import Material
 from random_gen import RandomGen
+from constants import EPSILON
 
 from trader import Trader
 from food import Food
@@ -200,8 +201,7 @@ class Player():
                 except ValueError:
                     temp_avl.__setitem__(cave.material.get_emerald_per_hunger_bar() + 0.000001,cave)  # O(log C)
 
-            
-            EPSILON = 0.00001
+        
 
             # Retrive the caves in order starting from the cave that has the material of the highest emerald per hunger bar value. 
             for cave in self.caves_list :# O(C)
