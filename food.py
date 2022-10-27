@@ -114,7 +114,7 @@ class Food:
         Generate random instance of Food
         '''
         random_name = RandomGen.random_choice(FOOD_NAMES)
-        random_hunger_bars = RandomGen.random_choice(50,500)
+        random_hunger_bars = RandomGen.randint(50,500)
         random_price = RandomGen.randint(5,50)
         return Food(random_name,random_hunger_bars,random_price)
 
