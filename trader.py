@@ -162,9 +162,9 @@ class RangeTrader(Trader):
     def generate_deal(self) -> None:
         
         i = RandomGen.randint(1, len(self.inventory))
-        j = RandomGen.randint(i - 1, len(self.inventory))
+        j = RandomGen.randint(i, len(self.inventory))
 
-        material_list = self.materials_between(i - 1, j) # i starts from 1
+        material_list = self.materials_between(i - 1, j - 1) 
         material = RandomGen.random_choice(material_list)
         price = self.generate_price()
         self.active_deal = (material, price)
