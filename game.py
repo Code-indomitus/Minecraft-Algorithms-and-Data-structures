@@ -1,6 +1,5 @@
 from __future__ import annotations
 from constants import EPSILON
-from hash_table import LinearProbeTable
 
 from player import Player
 from trader import HardTrader, RandomTrader, RangeTrader, Trader
@@ -29,9 +28,9 @@ class Game:
         #TODO
         #is this supposed to be a hash table?
         #but getters return a list
-        self.materials = None
-        self.caves = None  
-        self.traders = None
+        self.materials = []
+        self.caves = [] 
+        self.traders = []
 
     def initialise_game(self) -> None:
         """Initialise all game objects: Materials, Caves, Traders."""
@@ -97,7 +96,7 @@ class Game:
         (You may have to call Cave.random_cave more than <amount> times.)
         """
         while len(self.caves) < amount:
-            new_cave = Cave.random_cave()
+            new_cave = Cave.random_cave(self.materials)
             similar_cave = False 
 
             for cave in self.caves:
@@ -117,6 +116,7 @@ class Game:
         Generated traders must all have different names
         (You may have to call <TraderClass>.random_trader() more than <amount> times.)
         """
+
 
         while len(self.traders) < amount:
             similar_trader = False
@@ -147,6 +147,7 @@ class Game:
 
         mats_subset_length = RandomGen.randint(1,len(self.materials))
         mats_subset = self.materials[:mats_subset_length]
+        #mats_subset = self.materials
         new_trader.set_all_materials(mats_subset)
 
         return new_trader
@@ -183,9 +184,9 @@ class SoloGame(Game):
 
     def simulate_day(self):
         # 1. Traders make deals
-
-        #raise NotImplementedError() #TODO: REMOVE THIS
-
+        game_traders = self.get_traders()
+        for trader in game_traders:
+            trader.generate_deal()
 
         print("Traders Deals:\n\t", end="")
         print("\n\t".join(map(str, self.get_traders())))
@@ -201,10 +202,18 @@ class SoloGame(Game):
         food, balance, caves = self.player.select_food_and_caves()
         print(food, balance, caves)
         # 4. Quantites for caves is updated, some more stuff is added.
-        self.verify_output_and_update_quantities(food, balance, caves)
+        #self.verify_output_and_update_quantities(food, balance, caves)
 
     def verify_output_and_update_quantities(self, food: Food | None, balance: float, caves: list[tuple[Cave, float]]) -> None:
-        raise NotImplementedError()
+        if food not in self.player.get_foods:
+            raise ValueError
+
+        for item in caves:
+            if item[0] not in self.player.get_caves:
+                raise ValueError
+
+        
+           
 
 class MultiplayerGame(Game):
 
