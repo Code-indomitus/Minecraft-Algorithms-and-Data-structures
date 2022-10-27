@@ -131,7 +131,7 @@ class Cave:
         return self.quantity
 
     def __str__(self) -> str:
-        return self.name + " has " + str(self.quantity) + " " + str(self.material)
+        return "<Cave: {}. {} of [{}]>".format(self.name, str(self.quantity), str(self.material))
 
     @classmethod
     def random_cave(self, material_list: list[Material]) -> Cave:
