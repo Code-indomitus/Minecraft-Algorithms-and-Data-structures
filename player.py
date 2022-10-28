@@ -267,7 +267,7 @@ class Player():
         # Resetting the emerald per hunger bar for every material that might have been set to a value in previous calls to this function
         for material in self.materials_list: # O(M)
             material.set_emerald_per_hunger_bar(None)  
-
+            material.current_best_price_for_sold = None
         # Find the emerald per hunger bar of each material .This is to identify which are the better caves to go for mining 
         for traders in self.traders_list: # O(T)
             current_deal = traders.current_deal() 
