@@ -238,7 +238,8 @@ class MultiplayerGame(Game):
 
     def generate_random_players(self, amount) -> None:
         """Generate <amount> random players. Don't need anything unique, but you can do so if you'd like."""
-        raise NotImplementedError()
+        for _ in range(amount):
+            self.players.append(Player.random_player())
 
     def initialise_with_data(self, materials: list[Material], caves: list[Cave], traders: list[Trader], player_names: list[int], emerald_info: list[float]):
         super().initialise_with_data(materials, caves, traders)
@@ -266,7 +267,35 @@ class MultiplayerGame(Game):
     def select_for_players(self, food: Food) -> tuple[list[Food|None], list[float], list[tuple[Cave, float]|None]]:
         """
         """
-        raise NotImplementedError()
+        food_selected = []
+        balance = []
+        caves_selected = []  
+
+        # Resetting the emerald per hunger bar for every material that might have been set to a value in previous calls to this function
+        for material in self.materials: # O(M)
+            material.set_emerald_per_hunger_bar(None)  
+            material.current_best_price_for_sold = None
+
+        # Find the emerald per hunger bar of each material .This is to identify which are the better caves to go for mining 
+        for trader in self.traders: # O(T)
+            current_deal = trader.current_deal() 
+            trader_material = current_deal[0]
+            material_price = current_deal[1]
+
+            trader_material.set_current_best_price_for_sold(material_price)
+
+            emerald_per_hunger_bar = trader_material.get_current_best_price_for_sold() / trader_material.get_mining_rate() 
+
+            trader_material.set_emerald_per_hunger_bar(emerald_per_hunger_bar)
+        
+        for player in self.players:
+            if player.balance < food.price:
+                food_selected.append(None)
+                balance.append(player.balance)
+                caves_selected.append(None)
+            
+            else:
+                pass # logic to check for the best cave
 
     def verify_output_and_update_quantities(self, foods: list[Food | None], balances: list[float], caves: list[tuple[Cave, float]|None]) -> None:
         raise NotImplementedError()
