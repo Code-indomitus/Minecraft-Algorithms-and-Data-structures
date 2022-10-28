@@ -223,7 +223,7 @@ class MultiplayerGame(Game):
     def __init__(self) -> None:
         super().__init__()
         self.players = []
-        #FIXME: Do I change this list?
+
 
     def initialise_game(self) -> None:
         super().initialise_game()
@@ -236,10 +236,20 @@ class MultiplayerGame(Game):
         print("Players:\n\t", end="")
         print("\n\t".join(map(str, self.players)))
 
+
     def generate_random_players(self, amount) -> None:
         """Generate <amount> random players. Don't need anything unique, but you can do so if you'd like."""
-        for _ in range(amount):
-            self.players.append(Player.random_player())
+        while len(self.players) < amount:
+            new_player = Player.random_player()
+            similar_player = False
+
+            for player in self.players:
+                if player.name == new_player.name:
+                    similar_player = True
+                    break
+            
+            if not similar_player:
+                self.players.append(new_player)
 
     def initialise_with_data(self, materials: list[Material], caves: list[Cave], traders: list[Trader], player_names: list[int], emerald_info: list[float]):
         super().initialise_with_data(materials, caves, traders)
@@ -253,7 +263,10 @@ class MultiplayerGame(Game):
 
     def simulate_day(self):
         # 1. Traders make deals
-        #raise NotImplementedError() #TODO: Remove this
+        game_traders = self.get_traders()
+        for trader in game_traders:
+            trader.generate_deal()
+
         print("Traders Deals:\n\t", end="")
         print("\n\t".join(map(str, self.get_traders())))
         # 2. Food is offered
@@ -269,11 +282,11 @@ class MultiplayerGame(Game):
         """
         food_selected = []
         balance = []
-        caves_selected = []  
+        caves_selected = []
 
         # Resetting the emerald per hunger bar for every material that might have been set to a value in previous calls to this function
         for material in self.materials: # O(M)
-            material.set_emerald_per_hunger_bar(None)  
+            material.set_emerald_per_hunger_bar(None)
             material.current_best_price_for_sold = None
 
         # Find the emerald per hunger bar of each material .This is to identify which are the better caves to go for mining 
@@ -287,15 +300,26 @@ class MultiplayerGame(Game):
             emerald_per_hunger_bar = trader_material.get_current_best_price_for_sold() / trader_material.get_mining_rate() 
 
             trader_material.set_emerald_per_hunger_bar(emerald_per_hunger_bar)
-        
+
+        most_optimal_cave = None
+        most_optimal_cave_emerald_per_hunger_bar = 0
+
+        for cave in self.caves :
+            
+
         for player in self.players:
             if player.balance < food.price:
                 food_selected.append(None)
                 balance.append(player.balance)
                 caves_selected.append(None)
-            
+
             else:
-                pass # logic to check for the best cave
+                temp_balance = player.balance
+                food_selected.append(food)
+                temp_balance -= food.price
+                balance.append(temp_balance)
+
+        
 
     def verify_output_and_update_quantities(self, foods: list[Food | None], balances: list[float], caves: list[tuple[Cave, float]|None]) -> None:
         raise NotImplementedError()

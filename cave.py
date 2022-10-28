@@ -111,6 +111,7 @@ class Cave:
         self.name = name
         self.material = material
         self.quantity = quantity
+        self.temp_quantity = None
     
     def add_quantity(self, amount: float) -> None:
         '''
@@ -129,6 +130,15 @@ class Cave:
         Return the quantity of material 
         '''
         return self.quantity
+    
+    def set_temp_quantity(self) -> None:
+        self.temp_quantity = self.quantity
+
+    def get_temp_quantity(self) -> float:
+        return self.temp_quantity
+    
+    def remove_temp_quantity(self, amount: float) -> None:
+        self.temp_quantity = self.temp_quantity - amount
 
     def __str__(self) -> str:
         return "<Cave: {}. {} of [{}]>".format(self.name, str(self.quantity), str(self.material))
