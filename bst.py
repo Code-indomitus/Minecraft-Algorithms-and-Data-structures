@@ -178,6 +178,10 @@ class BinarySearchTree(Generic[K, I]):
             It should be a node in the subtree rooted at current having the smallest key among all the
             larger keys.
             If no such node exists, then none should be returned.
+            :param current: the node for which the successor node needs to be found
+            :return: Treenode that is the successor of current. None if there is no successor
+            :complexity: Best is O(1) when current is leaf. Worst case complexity is O(D) 
+            where D is the depth of the subtree under current.
         """
         if current.right is None:
             return None
@@ -187,6 +191,10 @@ class BinarySearchTree(Generic[K, I]):
     def get_minimal(self, current: TreeNode) -> TreeNode:
         """
             Get a node having the smallest key in the current sub-tree.
+            :param current: the node for which the minimal node needs to be found
+            :return: Treenode that is minimal. None if there is no minimal.
+            :complexity: Best is O(1) when current is leaf. Worst case complexity is O(D) 
+            where D is the depth of the subtree under current.
         """
         
         if (current is None) or (current.left is None):
@@ -225,13 +233,17 @@ class BinarySearchTree(Generic[K, I]):
         '''
         Find the node with the maximum key and delete that node before returning it
         Used in : select_food_and_cave method of Player class
+        :complexity : Worst: O(Depth) + O(delete) where O(delete) is also O(Depth). Thus, worst-case complexity is O(Depth)
+                      Best: O(1)
         '''
         return self.find_max_and_remove_aux(self.root)
 
     def find_max_and_remove_aux(self,current: TreeNode):
         '''
-        Time complexity : Worst: O(Depth) + O(delete) where O(delete) is also O(Depth). Thus, worst-case complexity is O(Depth)
-                          Best: O(1)
+        Auxilliary function to find the max node and remove it.
+        :param current: the current node of the tree
+        :complexity : Worst: O(Depth) + O(delete) where O(delete) is also O(Depth). Thus, worst-case complexity is O(Depth)
+                      Best: O(1)
         '''
         
         if current is None:
