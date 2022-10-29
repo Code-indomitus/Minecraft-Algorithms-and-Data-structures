@@ -104,7 +104,7 @@ class Material:
         self.emerald_per_hunger_bar = None
     
     def __str__(self) -> str:
-        return self.name + ": " + str(self.mining_rate) + "🍗/💎"
+        return self.name + " with mining rate of " + str(self.mining_rate)
 
     @classmethod
     def random_material(cls):
@@ -134,6 +134,8 @@ class Material:
 
     def get_current_best_price_for_sold(self):
         return self.current_best_price_for_sold
+
+
 
 if __name__ == "__main__":
     print(Material("Coal", 4.5))
