@@ -224,6 +224,8 @@ class SoloGame(Game):
         for cave_tup in caves:
             cave_tup[0].remove_quantity(cave_tup[1])
         
+        # update player emerald balance
+        self.player.balance = balance
 
 class MultiplayerGame(Game):
 
