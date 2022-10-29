@@ -46,10 +46,14 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
             return 0
         return self.get_height(current.right) - self.get_height(current.left)
 
-    #TODO: Documentation
     def insert_aux(self, current: AVLTreeNode, key: K, item: I) -> AVLTreeNode:
         """
             Attempts to insert an item into the AVL tree, it uses the Key to insert it. Rebalancing is done after
+            :param current: the current node in the avl tree
+            :param key: node with key to be inserted
+            :param key: node with item to be inserted
+            :complexity: Best and worst case complexity is O(log(n))
+            where n is the number of trees in the node
         """
         if current is None:  # base case: at the leaf
             current = AVLTreeNode(key, item)
@@ -68,11 +72,14 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
 
         return current
 
-    #TODO: Documentation
     def delete_aux(self, current: AVLTreeNode, key: K) -> AVLTreeNode:
         """
             Attempts to delete an item from the tree, it uses the Key to
             determine the node to delete.
+            :param current: the current node in the avl tree
+            :param key: node with key to be deleted
+            :complexity: Best and worst case complexity is O(log(n))
+            where n is the number of trees in the node
         """
 
         if current is None:  # key not found
@@ -120,7 +127,7 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
                       /     \                           /     \
                  center     r-tree                 l-tree     center
 
-            :complexity: O(1)
+            :complexity: Best and worst case complexity O(1)
         """
 
         new_root = current.right
@@ -147,7 +154,7 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
                  /     \                                           /     \
             l-tree     center                                 center     r-tree
 
-            :complexity: O(1)
+            :complexity: Best and worst case complexity O(1)
         """
 
         new_root = current.left
@@ -169,6 +176,7 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
             - a combination of left + right rotate
             - a combination of right + left rotate
             returns the new root of the subtree.
+            :complexity: Best and worst case complexity O(1)
         """
         if self.get_balance(current) >= 2:
             child = current.right
