@@ -350,7 +350,7 @@ class Player():
                 
             
     def __str__(self) -> str:
-        return "Player" + self.name + " has a balance of " + str(self.balance) + "emeralds"
+        return "Player " + self.name + " has a balance of " + str(self.balance) + " emeralds"
 
 if __name__ == "__main__":
     print(Player("Steve"))
