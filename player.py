@@ -162,6 +162,9 @@ class Player():
     def select_food_and_caves(self) -> tuple[Food | None, float, list[tuple[Cave, float]]]:
         '''
         Complexity : Worst-Case complexity = Best-Case Complexity = O(M + T + F*( C*logC + C*logC )) = O(M + T + F*C*logC)
+
+        The first for loop is to iterate through the whole list of materials to to reset the value of the current_best_price_for sold and the emerald_per_hunger_bar of 
+        each material everytime this method select_food_and_caves is called.
     
         The first for loop is to iterate through the whole list of traders. At each iteration, the information in regards to the deal generated that is 
         the material and the selling price of that material of that particular trader are retrieved. The price of that material is then set to to the current_best_price_for_sold 
