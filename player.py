@@ -162,9 +162,6 @@ class Player():
     def select_food_and_caves(self) -> tuple[Food | None, float, list[tuple[Cave, float]]]:
         '''
         Complexity : Worst-Case complexity = Best-Case Complexity = O(M + T + F*( C*logC + C*logC )) = O(M + T + F*C*logC)
-
-        The first for loop is to iterate through the whole list of materials to to reset the value of the current_best_price_for sold and the emerald_per_hunger_bar of 
-        each material everytime this method select_food_and_caves is called.
     
         The first for loop is to iterate through the whole list of traders. At each iteration, the information in regards to the deal generated that is 
         the material and the selling price of that material of that particular trader are retrieved. The price of that material is then set to to the current_best_price_for_sold 
@@ -292,59 +289,60 @@ class Player():
             temp_hunger_bars = food.hunger_bars
             temp_caves_selected = []
 
-            # Add the caves into the Avl tree by using the emerald per hunger bar calculated as the key and cave as the item . AVL helps to sort the caves in order based on the 
-            # emerald per hunger bar of material
-            for cave in self.caves_list : # O(C)
-
-                
-                if cave.material.get_emerald_per_hunger_bar() is None:
-                    continue
-
-                try:          
-                    temp_avl[cave.material.get_emerald_per_hunger_bar()] = cave  # O(log C)
-
-                except ValueError:
-                    temp_avl[cave.material.get_emerald_per_hunger_bar() + 0.00001] = cave # O(log C)
-
-            # Retrive the caves in order starting from the cave that has the material of the highest emerald per hunger bar value. 
-            for cave in self.caves_list :# O(C)
-                
-                
-                if cave.material.get_emerald_per_hunger_bar() is None:
-                    continue
-
-                # if the hunger_bar of the player is still not yet 0 , the day continues 
-                if 0 < temp_hunger_bars - EPSILON:
-                    
-                    # Retrieve the cave with the material of the highest emerald per hunger bar value
-                    current_cave_selected = temp_avl.find_max_and_remove().item # O(log C)
-
-                    material_in_cave = current_cave_selected.material
-                    number_of_material = current_cave_selected.quantity
-                    total_hunger_bars_needed_if_fully_mine = material_in_cave.get_mining_rate()*number_of_material
-
-                    # If the player has enough hunger bar to mine all of the materials in this cave
-                    if total_hunger_bars_needed_if_fully_mine <= temp_hunger_bars - EPSILON :
-                        amount_mined = number_of_material
-                        temp_hunger_bars = temp_hunger_bars - total_hunger_bars_needed_if_fully_mine
-
-                    # If the player does not have enough hunger bar to mine all of the materials in this cave 
-                    else:
-                        amount_mined = temp_hunger_bars / material_in_cave.get_mining_rate() 
-                        temp_hunger_bars = 0
-
-                    temp_balance = temp_balance + amount_mined*material_in_cave.get_current_best_price_for_sold()
-                    temp_caves_selected.append((current_cave_selected,amount_mined))
-                        
-                else :
-                    break
+            if food.price <= self.balance - EPSILON:
+                # Add the caves into the Avl tree by using the emerald per hunger bar calculated as the key and cave as the item . AVL helps to sort the caves in order based on the 
+                # emerald per hunger bar of material
+                key_constant = 0.0000000001
+                for cave in self.caves_list : # O(C)
             
+                    if cave.material.get_emerald_per_hunger_bar() is None:
+                        continue
 
-            # The most optimal solution
-            if balance < temp_balance - EPSILON:
-                food_selected = food
-                balance = temp_balance
-                caves_selected = temp_caves_selected
+                    try:          
+                        temp_avl[cave.material.get_emerald_per_hunger_bar()] = cave  # O(log C)
+
+                    except ValueError:
+                        temp_avl[cave.material.get_emerald_per_hunger_bar() + key_constant] = cave # O(log C)
+                        key_constant += 0.0000000001
+
+                # Retrive the caves in order starting from the cave that has the material of the highest emerald per hunger bar value. 
+                for cave in self.caves_list :# O(C)
+                    
+                    if cave.material.get_emerald_per_hunger_bar() is None:
+                        continue
+
+                    # if the hunger_bar of the player is still not yet 0 , the day continues 
+                    if 0 < temp_hunger_bars - EPSILON:
+                        
+                        # Retrieve the cave with the material of the highest emerald per hunger bar value
+                        current_cave_selected = temp_avl.find_max_and_remove().item # O(log C)
+
+                        material_in_cave = current_cave_selected.material
+                        number_of_material = current_cave_selected.quantity
+                        total_hunger_bars_needed_if_fully_mine = material_in_cave.get_mining_rate()*number_of_material
+
+                        # If the player has enough hunger bar to mine all of the materials in this cave
+                        if total_hunger_bars_needed_if_fully_mine <= temp_hunger_bars - EPSILON :
+                            amount_mined = number_of_material
+                            temp_hunger_bars = temp_hunger_bars - total_hunger_bars_needed_if_fully_mine
+
+                        # If the player does not have enough hunger bar to mine all of the materials in this cave 
+                        else:
+                            amount_mined = temp_hunger_bars / material_in_cave.get_mining_rate() 
+                            temp_hunger_bars = 0
+
+                        temp_balance = temp_balance + amount_mined*material_in_cave.get_current_best_price_for_sold()
+                        temp_caves_selected.append((current_cave_selected,amount_mined))
+                            
+                    else :
+                        break
+                
+
+                # The most optimal solution
+                if balance < temp_balance - EPSILON:
+                    food_selected = food
+                    balance = temp_balance
+                    caves_selected = temp_caves_selected
         
 
         return (food_selected,balance,caves_selected)
@@ -353,7 +351,7 @@ class Player():
                 
             
     def __str__(self) -> str:
-        return "Player " + self.name + " has a balance of " + str(self.balance) + " emeralds"
+        return "Player" + self.name + " has a balance of " + str(self.balance) + "emeralds"
 
 if __name__ == "__main__":
     print(Player("Steve"))
