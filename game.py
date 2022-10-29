@@ -1,4 +1,5 @@
 from __future__ import annotations
+from multiprocessing.sharedctypes import Value
 from constants import EPSILON
 
 from player import Player
@@ -334,7 +335,33 @@ class MultiplayerGame(Game):
         
 
     def verify_output_and_update_quantities(self, foods: list[Food | None], balances: list[float], caves: list[tuple[Cave, float]|None]) -> None:
-        raise NotImplementedError()
+        if not (len(foods) == len(self.players) and len(balances) == len(self.players) and len(caves) == len(self.players)):
+            raise ValueError("Inaccurate lengths of caves, foods and balances regarding number of players present in multiplayer game.")
+
+        for player, food, balance, cave_tup in zip(self.players, foods, balances, caves):
+            
+            if food is None:
+                if not cave_tup is None:
+                    raise ValueError("Player cannot mine without food.")
+            else:
+                if cave_tup[0].material.get_current_best_price_for_sold() is None:
+                    raise ValueError("Material is not sold by any trader!")
+                
+                if not (cave_tup[1] <= cave_tup[0].get_quantity() - EPSILON ):
+                    raise ValueError("Player is trying to mine more than the cave has to offer")
+
+                total_emeralds_collected = cave_tup[1] * cave_tup[0].material.get_current_best_price_for_sold()
+                
+                calculated_balance  = total_emeralds_collected + player.balance - food.price
+
+                if not abs(calculated_balance - balance) < EPSILON:
+                    raise ValueError("Incorrect balance calculated for player.")
+                
+                # # update the cave quantities
+                cave_tup[0].remove_quantity(cave_tup[1])
+            
+            # update player emerald balance
+            player.balance = balance
 
 if __name__ == "__main__":
 
