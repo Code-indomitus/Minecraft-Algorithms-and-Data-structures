@@ -104,7 +104,7 @@ class Material:
         self.emerald_per_hunger_bar = None
     
     def __str__(self) -> str:
-        return self.name + " with mining rate of " + str(self.mining_rate)
+        return self.name + ": " + str(self.mining_rate) + "🍗/💎"
 
     @classmethod
     def random_material(cls):
