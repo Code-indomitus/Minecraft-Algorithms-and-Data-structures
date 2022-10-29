@@ -1,5 +1,4 @@
 from __future__ import annotations
-from multiprocessing.sharedctypes import Value
 from constants import EPSILON
 
 from player import Player
@@ -148,11 +147,9 @@ class Game:
 
         mats_subset_length = RandomGen.randint(1,len(self.materials))
         mats_subset = self.materials[:mats_subset_length]
-        #mats_subset = self.materials
         new_trader.set_all_materials(mats_subset)
 
         return new_trader
-
 
 
     def finish_day(self):
@@ -206,27 +203,30 @@ class SoloGame(Game):
         self.verify_output_and_update_quantities(food, balance, caves)
 
     def verify_output_and_update_quantities(self, food: Food | None, balance: float, caves: list[tuple[Cave, float]]) -> None:
-        if food not in self.player.get_foods():
-            raise ValueError("Food not in list of foods.")
-        if food.price > self.player.balance:
-            raise ValueError("Player cannot afford food item.")
 
-        total_emeralds_collected = 0
+        if food is not None:  
+            if food not in self.player.get_foods():
+                raise ValueError("Food not in list of foods.")
+            if self.player.balance < food.price - EPSILON:
+                raise ValueError("Player cannot afford food item.")
 
-        for cave_tuple in caves:
-            total_emeralds_collected = total_emeralds_collected + cave_tuple[1] * cave_tuple[0].material.get_current_best_price_for_sold()
-        
-        calculated_balance  = total_emeralds_collected + self.player.balance - food.price
+            total_emeralds_collected = 0
 
-        if not abs(calculated_balance - balance) < EPSILON:
-            raise ValueError("Incorrect balance calculated")
-        
-        # update the cave quantities
-        for cave_tup in caves:
-            cave_tup[0].remove_quantity(cave_tup[1])
-        
-        # update player emerald balance
-        self.player.balance = balance
+            for cave_tuple in caves:
+                total_emeralds_collected = total_emeralds_collected + cave_tuple[1] * cave_tuple[0].material.get_current_best_price_for_sold()
+            
+            calculated_balance  = total_emeralds_collected + self.player.balance - food.price
+
+            if not abs(calculated_balance - balance) < EPSILON:
+                raise ValueError("Incorrect balance calculated")
+            
+            # update the cave quantities
+            for cave_tup in caves:
+                cave_tup[0].remove_quantity(cave_tup[1])
+            
+            # update player emerald balance
+            self.player.balance = balance
+
 
 class MultiplayerGame(Game):
 
@@ -274,6 +274,7 @@ class MultiplayerGame(Game):
         print("Players:\n\t", end="")
         print("\n\t".join(map(str, self.players)))
 
+
     def simulate_day(self):
         # 1. Traders make deals
         game_traders = self.get_traders()
@@ -290,17 +291,17 @@ class MultiplayerGame(Game):
         # 4. Quantites for caves is updated, some more stuff is added.
         self.verify_output_and_update_quantities(foods, balances, caves)
 
+
     def select_for_players(self, food: Food) -> tuple[list[Food|None], list[float], list[tuple[Cave, float]|None]]:
         """
         """
         food_selected = []
         balance = []
-        caves_selected = []
+        visited_caves = []
 
-        # Resetting the emerald per hunger bar for every material that might have been set to a value in previous calls to this function
-        for material in self.materials: # O(M)
-            material.set_emerald_per_hunger_bar(None)
-            material.current_best_price_for_sold = None
+        for cave in self.caves:
+            cave.set_temp_quantity(cave.quantity)
+            cave.material.current_best_price_for_sold = None
 
         # Find the emerald per hunger bar of each material .This is to identify which are the better caves to go for mining 
         for trader in self.traders: # O(T)
@@ -310,29 +311,59 @@ class MultiplayerGame(Game):
 
             trader_material.set_current_best_price_for_sold(material_price)
 
-            emerald_per_hunger_bar = trader_material.get_current_best_price_for_sold() / trader_material.get_mining_rate() 
-
-            trader_material.set_emerald_per_hunger_bar(emerald_per_hunger_bar)
-
         most_optimal_cave = None
-        most_optimal_cave_emerald_per_hunger_bar = 0
-
-        for cave in self.caves :
-            pass
 
         for player in self.players:
-            if player.balance < food.price:
+            if player.balance < food.price - EPSILON:
                 food_selected.append(None)
                 balance.append(player.balance)
-                caves_selected.append(None)
+                visited_caves.append(None)
 
             else:
                 temp_balance = player.balance
                 food_selected.append(food)
                 temp_balance -= food.price
-                balance.append(temp_balance)
 
+                opt_return = 0
+                opt_mined_quantity = 0
+
+                for cave in self.caves:
+
+                    if cave.material.get_current_best_price_for_sold() is None:
+                        continue
+                    
+                    #opt_return, opt_mined_quantity = self.calculate_cave_returns(most_optimal_cave, food)
+                    new_return, new_mined_quantity = self.calculate_cave_returns(cave, food)
+
+                    #comparing the emerald returns
+                    if opt_return < new_return - EPSILON:
+                        most_optimal_cave = cave
+                        opt_mined_quantity = new_mined_quantity
+                        opt_return = new_return
+
+                temp_balance += opt_return
+                balance.append(temp_balance)
+                    
+                visited_caves.append((most_optimal_cave, opt_mined_quantity))
+                most_optimal_cave.set_temp_quantity(cave.get_temp_quantity() - opt_mined_quantity)
         
+        return food_selected, balance, visited_caves
+
+    def calculate_cave_returns(self, cave: Cave, food: Food) -> tuple[float, float]:
+        cave_quantity = cave.get_temp_quantity()
+        material_mining_rate = cave.material.get_mining_rate()
+        total_mineable_quantity = food.hunger_bars/material_mining_rate
+        material_price = cave.material.get_current_best_price_for_sold()
+        
+        if cave_quantity <= total_mineable_quantity - EPSILON:
+            quantity_mined = cave_quantity
+        else:
+            quantity_mined = total_mineable_quantity
+
+        cave_returns = quantity_mined * material_price
+
+        return cave_returns, quantity_mined
+
 
     def verify_output_and_update_quantities(self, foods: list[Food | None], balances: list[float], caves: list[tuple[Cave, float]|None]) -> None:
         if not (len(foods) == len(self.players) and len(balances) == len(self.players) and len(caves) == len(self.players)):
@@ -347,25 +378,28 @@ class MultiplayerGame(Game):
                 if cave_tup[0].material.get_current_best_price_for_sold() is None:
                     raise ValueError("Material is not sold by any trader!")
                 
-                if not (cave_tup[1] <= cave_tup[0].get_quantity() - EPSILON ):
-                    raise ValueError("Player is trying to mine more than the cave has to offer")
+                #TODO: REMOVE THIS SHIT!!!!!!!!!!
+                # if (cave_tup[0].get_quantity() < cave_tup[1] - EPSILON):
+                #     raise ValueError("Player is trying to mine more than the cave has to offer")
 
                 total_emeralds_collected = cave_tup[1] * cave_tup[0].material.get_current_best_price_for_sold()
                 
                 calculated_balance  = total_emeralds_collected + player.balance - food.price
 
-                if not abs(calculated_balance - balance) < EPSILON:
+                print ("Calc: " + str(calculated_balance))
+                print ("Actual: " + str(balance))
+                if not (abs(calculated_balance - balance) < EPSILON):
                     raise ValueError("Incorrect balance calculated for player.")
                 
                 # # update the cave quantities
                 cave_tup[0].remove_quantity(cave_tup[1])
             
-            # update player emerald balance
-            player.balance = balance
+                # update player emerald balance
+                player.balance = balance
 
 if __name__ == "__main__":
 
-    r = RandomGen.seed # Change this to set a fixed seed.
+    r = 1234 # Change this to set a fixed seed.
     RandomGen.set_seed(r)
     print(r)
 
