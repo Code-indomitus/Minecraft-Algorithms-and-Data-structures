@@ -386,8 +386,6 @@ class MultiplayerGame(Game):
                 
                 calculated_balance  = total_emeralds_collected + player.balance - food.price
 
-                print ("Calc: " + str(calculated_balance))
-                print ("Actual: " + str(balance))
                 if not (abs(calculated_balance - balance) < EPSILON):
                     raise ValueError("Incorrect balance calculated for player.")
                 
