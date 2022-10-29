@@ -81,7 +81,7 @@ class Trader(ABC):
         """
 
         self.name = name
-        self.inventory = AVLTree() # unsure what to use
+        self.inventory = AVLTree() 
         self.active_deal = None
         self.trader_type = None
  
@@ -203,8 +203,6 @@ class RandomTrader(Trader):
         Trader.__init__(self, name)
         self.trader_type = "RandomTrader"
     
-    # def set_all_materials(self, mats: list[Material]) -> None:
-    #     pass
 
     def generate_deal(self) -> None:
         """
@@ -237,8 +235,6 @@ class RangeTrader(Trader):
         Trader.__init__(self, name)
         self.trader_type = "RangeTrader"
    
-    # def set_all_materials(self, mats: list[Material]) -> None:
-    #     pass
 
     def generate_deal(self) -> None:
         """
@@ -288,8 +284,6 @@ class HardTrader(Trader):
         Trader.__init__(self, name)
         self.trader_type = "HardTrader"
 
-    # def set_all_materials(self, mats: list[Material]) -> None:
-    #     pass
 
     def generate_deal(self) -> None:
         """
