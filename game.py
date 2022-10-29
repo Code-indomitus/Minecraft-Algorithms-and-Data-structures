@@ -202,18 +202,28 @@ class SoloGame(Game):
         food, balance, caves = self.player.select_food_and_caves()
         print(food, balance, caves)
         # 4. Quantites for caves is updated, some more stuff is added.
-        #self.verify_output_and_update_quantities(food, balance, caves)
+        self.verify_output_and_update_quantities(food, balance, caves)
 
     def verify_output_and_update_quantities(self, food: Food | None, balance: float, caves: list[tuple[Cave, float]]) -> None:
-        if food not in self.player.get_foods:
-            raise ValueError
+        if food not in self.player.get_foods():
+            raise ValueError("Food not in list of foods.")
+        if food.price > self.player.balance:
+            raise ValueError("Player cannot afford food item.")
 
-        for item in caves:
-            if item[0] not in self.player.get_caves:
-                raise ValueError
+        total_emeralds_collected = 0
 
+        for cave_tuple in caves:
+            total_emeralds_collected = total_emeralds_collected + cave_tuple[1] * cave_tuple[0].material.get_current_best_price_for_sold()
         
-           
+        calculated_balance  = total_emeralds_collected + self.player.balance - food.price
+
+        if not abs(calculated_balance - balance) < EPSILON:
+            raise ValueError("Incorrect balance calculated")
+        
+        # update the cave quantities
+        for cave_tup in caves:
+            cave_tup[0].remove_quantity(cave_tup[1])
+        
 
 class MultiplayerGame(Game):
 
@@ -305,7 +315,7 @@ class MultiplayerGame(Game):
         most_optimal_cave_emerald_per_hunger_bar = 0
 
         for cave in self.caves :
-            
+            pass
 
         for player in self.players:
             if player.balance < food.price:
