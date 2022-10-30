@@ -39,7 +39,7 @@ class LargestPrimeIterator():
         """ Using the sieve of eratosthenes get the largest prime number under bound
         :param number: the bound under which the list of prime numbers are generated
         :returns: the largest prime under the bound
-        :complexity: Best and worst case O(n^2)
+        :complexity: Best and worst case O(n^2) where n is number, the upper bound
         """
 
         numbers = list(range(2, number))
