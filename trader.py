@@ -1,3 +1,4 @@
+""" File that holds all code that creates the different types of traders in the game."""
 from __future__ import annotations
 
 from abc import abstractmethod, ABC
@@ -5,6 +6,8 @@ from abc import abstractmethod, ABC
 from avl import AVLTree
 from material import Material
 from random_gen import RandomGen
+
+__author__ = 'Shyam Kamalesh Borkar and Jobin Mathew Dan'
 
 # Generated with https://www.namegenerator.co/real-names/english-name-generator
 TRADER_NAMES = [
@@ -71,12 +74,13 @@ TRADER_NAMES = [
 ]
 
 class Trader(ABC):
+    """ Abstract class for traders"""
     
     def __init__(self, name: str) -> None:
         """
         Constructor for trader
-        
         :param name: Name of the Trader
+        :complexity: The best and worst case complexity is O(1).
         """
 
         self.name = name
@@ -90,17 +94,15 @@ class Trader(ABC):
         '''
         Generate random instance of Trader
         '''
-
         pass
     
-    # @abstractmethod
     def set_all_materials(self, mats: list[Material]) -> None:
         """
         Setting all the materials into the trader's inventory
         
         :param mats: The list of materials that the trader would sell
-        :complexity: The best case complexity is O(1).
-                     The worst case complexity is O(M) where M is the size of the material list
+        :complexity: The best and worst case complexity is O(N * log(n))
+        where N is the number of materials and n is the size of the inventory
         """
 
         self.inventory = AVLTree()
@@ -112,7 +114,8 @@ class Trader(ABC):
         Adding the material into the trader's inventory
         
         :param mat: The material that is added to the trader's inventory
-        :complexity: The best and worst case complexity is O(1).
+        :complexity: The best and worst case complexity is O(log(n)) where
+        n is the number of items in the inventory (AVL tree).
         """
 
         self.inventory[mat.mining_rate] = mat
@@ -122,7 +125,8 @@ class Trader(ABC):
         Removing the known material from the traders inventory
         
         :param mat: The material that is removed from the trader's inventory
-        :complexity: The best and worst case complexity is O(1).
+        :complexity: The best and worst case complexity is O(log(n)) where
+        n is the number of items in the inventory (AVL tree).
         """
 
         del self.inventory[mat.mining_rate]
@@ -142,7 +146,7 @@ class Trader(ABC):
 
     def current_deal(self) -> tuple[Material, float]:
         """
-        It would be showing the current deal of the material to the user
+        It would be showing the current deal of the material to the player
  
         :return: Returns the material and its price in a tuple format
         :raise ValueError: When there is no active deal
@@ -158,13 +162,11 @@ class Trader(ABC):
         """
         Generating the deal of the material
         """
-
         pass
 
     def generate_price(self) -> float:
         """
         Generating the price of the material
-
         :complexity: The best and worst case complexity is O(1).
         """
 
@@ -173,7 +175,6 @@ class Trader(ABC):
     def stop_deal(self) -> None:
         """
         The trader stops the current deal
-
         :complexity: The best and worst case complexity is O(1).
         """
 
@@ -181,10 +182,9 @@ class Trader(ABC):
 
     def __str__(self) -> str:
         """
-        It would be representing the trader's deal in the terminal
-
+        A string representation of the trader with the current deal
         :complexity: The best and worst case complexity is O(1).
-        :return: Returns the traders' names and what they would be selling into the terminal
+        :return: Returns the traders' name and what they would be selling
         """
 
         if not self.is_currently_selling():
@@ -200,8 +200,8 @@ class RandomTrader(Trader):
     def __init__(self, name: str) -> None:
         """
         Constructor for random trader type
-        
         :param name: Name of the Random Trader
+        :complexity: The best and worst case complexity is O(1).
         """
 
         Trader.__init__(self, name)
@@ -211,8 +211,8 @@ class RandomTrader(Trader):
     def generate_deal(self) -> None:
         """
         Generating the deal of the material
-
-        :complexity: The best and worst case complexity is O(1).
+        :complexity: The best and worst case complexity is O(n) where 
+        n is the number of items in the trader's inventory.
         """
 
         material_list = self.inventory.range_between(0, len(self.inventory) - 1)
@@ -224,9 +224,8 @@ class RandomTrader(Trader):
     def random_trader(cls) -> Trader:
         '''
         Generate random instance of Random Trader
-
         :complexity: The best and worst case complexity is O(1).
-        :return: The type of trader is returned
+        :return: the random trader object is returned
         '''
 
         random_name = RandomGen.random_choice(TRADER_NAMES)
@@ -236,8 +235,8 @@ class RangeTrader(Trader):
     def __init__(self, name: str) -> None:
         """
         Constructor for range trader type
-        
         :param name: Name of the Range Trader
+        :complexity: The best and worst case complexity is O(1).
         """
 
         Trader.__init__(self, name)
@@ -247,26 +246,26 @@ class RangeTrader(Trader):
     def generate_deal(self) -> None:
         """
         Generating the deal of the material
-
-        :complexity: The best and worst case complexity is O(1).
+        :complexity: The best and worst case complexity is O(n) where 
+        n is the number of items in the trader's inventory.
         """
 
         i = RandomGen.randint(1, len(self.inventory))
         j = RandomGen.randint(i, len(self.inventory))
 
-        material_list = self.materials_between(i - 1, j - 1) 
+        material_list = self.materials_between(i - 1, j - 1) # subtract 1 from i and j as index should start from 0
         material = RandomGen.random_choice(material_list)
         price = self.generate_price()
         self.active_deal = (material, price)
 
     def materials_between(self, i: int, j: int) -> list[Material]:
         """
-        Gets the material between the list of all the materials in the game
+        Gets the material between the materials in the traders inventory
         
         :param i: the index of the easiest to mine in the list of materials
         :param j: the index of the easiest to mine in the list of materials
-        :complexity: The best case would be O(1).
-                     The worst case complexity is O(N) where N represents the difference of i and j.
+        :complexity: The best and worst case complexity is O(N) where N 
+        represents the number of items in the inventory.
         :return: Gets the list of materials between the index i and j
         """
 
@@ -275,10 +274,10 @@ class RangeTrader(Trader):
     @classmethod
     def random_trader(cls) -> Trader:
         '''
-        Generate random instance of Random Trader
+        Generate random instance of range Trader
 
         :complexity: The best and worst case complexity is O(1).
-        :return: The type of trader is returned
+        :return: the range trader object is returned
         '''
 
         random_name = RandomGen.random_choice(TRADER_NAMES)
@@ -288,8 +287,8 @@ class HardTrader(Trader):
     def __init__(self, name: str) -> None:
         """
         Constructor for hard trader type
-        
         :param name: Name of the Hard Trader
+        :complexity: The best and worst case complexity is O(1).
         """
 
         Trader.__init__(self, name)
@@ -312,7 +311,10 @@ class HardTrader(Trader):
     @classmethod
     def random_trader(cls) -> Trader:
         '''
-        Generate random instance of Random Trader
+        Generate random instance of Hard Trader
+
+        :complexity: The best and worst case complexity is O(1).
+        :return: the Hard trader object is returned
         '''
 
         random_name = RandomGen.random_choice(TRADER_NAMES)
