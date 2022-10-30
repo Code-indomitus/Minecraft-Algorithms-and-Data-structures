@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from material import Material
 from random_gen import RandomGen
-__author__ = 'Tan Jun Yu'
+__author__ = "Tan Jun Yu, modified by Rachit Bhatia, Shyam Borkar"
 
 # List of cave names from https://en.uesp.net/wiki/Skyrim:Caves. Thanks Skyrim.
 CAVE_NAMES = [
@@ -120,7 +120,7 @@ class Cave:
         '''
         Add an amount to the quantity of material
         :param amount : amount to add to the quantity of material inside the cave
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         self.quantity = self.quantity + amount
     
@@ -128,14 +128,14 @@ class Cave:
         '''
         Remove an amount from the quantity of material
         :param amount : amount to remove from the quantity of material inside the cave
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         self.quantity = self.quantity - amount
 
     def get_quantity(self) -> float:
         '''
         Return the quantity of material 
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         return self.quantity
     
@@ -143,14 +143,14 @@ class Cave:
         '''
         Set the temp_quantity of the material
         :param new_quantity : the new quantity to be set as the temp_quantity
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         self.temp_quantity = new_quantity
 
     def get_temp_quantity(self) -> float:
         '''
         Return the temp_quantity of the material
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         self.temp_quantit
         return self.temp_quantity
@@ -159,7 +159,7 @@ class Cave:
         '''
         Remove a certain amount from the temp_quantity of the material
         :param amount : amount to remove from the temp_quantity
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         self.temp_quantity = self.temp_quantity - amount
 
@@ -184,7 +184,7 @@ class Cave:
     def __str__(self) -> str:
         '''
         Return a string representing the cave and all its relevant information 
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         return "<Cave: {}. {} of [{}]>".format(self.name, str(self.quantity), str(self.material))
 
@@ -193,7 +193,7 @@ class Cave:
         '''
         Generate random cave using the material_list parameter
         :param material_list : list of materials to be chosen from 
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         random_name = RandomGen.random_choice(CAVE_NAMES)
         random_material = RandomGen.random_choice(material_list)
