@@ -109,10 +109,12 @@ class Cave:
         3) quantity of material currently mineable 
         '''
 
-        self.name = name
-        self.material = material
-        self.quantity = quantity
-        self.temp_quantity = self.quantity
+        self.name = name    #name of the cave
+        self.material = material    #material inside the cave
+        self.quantity = quantity    #total quantity of material inside the cave
+        self.temp_quantity = self.quantity  #temporary quantity of material presemt inside the cave
+        self.mined_quantity = None  #the quantity of material mined by the players in the MultiPlayer Game
+
     
     def add_quantity(self, amount: float) -> None:
         '''
@@ -160,6 +162,24 @@ class Cave:
         :time complexity : best=worst= O(1)
         '''
         self.temp_quantity = self.temp_quantity - amount
+
+    def set_mined_quantity(self, quantity: float) -> None:
+        """ 
+        Set the material quantity mined by the player.
+
+        :param quantity: the quantity of the material mined by the player
+        :complexity: Best-Case = Worst-Case = O(1) since it only involves an assignment operation
+        """
+        self.mined_quantity = quantity
+
+    def get_mined_quantity(self) -> float:
+        """ 
+        Return the material quantity mined by the player.
+
+        :returns: Quantity of material inside cave mined by the Player
+        :complexity: Best-Case = Worst-Case = O(1) since it only returns an attribute value
+        """
+        return self.mined_quantity
 
     def __str__(self) -> str:
         '''
