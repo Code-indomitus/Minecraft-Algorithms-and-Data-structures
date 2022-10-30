@@ -13,7 +13,7 @@ Project Repository for use in Assignment 3
 - [X] hash_table.py
 - [X] primes.py
 - [X] bst.py
-- [ ] avl.py
+- [X] avl.py
 
 ## Implement the Game!
 - [ ] trader.py
@@ -28,10 +28,12 @@ Project Repository for use in Assignment 3
 - [ ] hash_table.py
 - [X] primes.py
 - [X] bst.py
-- [ ] avl.py
+- [X] avl.py
 - [ ] trader.py
 - [ ] player.py
 - [ ] material.py
 - [ ] cave.py
+- [ ] food.py
 - [ ] game.py
 
+- [ ] Hash Table Analysis
