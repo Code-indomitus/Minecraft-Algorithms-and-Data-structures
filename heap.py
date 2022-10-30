@@ -10,9 +10,23 @@ from referential_array import ArrayR, T
 class MaxHeap(Generic[T]):
     MIN_CAPACITY = 1
 
-    def __init__(self, max_size: int) -> None:
-        self.length = 0
+    # def __init__(self, max_size: int) -> None:
+    #     self.length = 0
+    #     self.the_array = ArrayR(max(self.MIN_CAPACITY, max_size) + 1)
+
+    def __init__(self, max_size: int, an_array : ArrayR[T] = None) -> None:
+
         self.the_array = ArrayR(max(self.MIN_CAPACITY, max_size) + 1)
+        self.length = max_size
+        if an_array is not None:
+
+            # copy an_array to self.the_array (shift by 1)
+            for i in range(self.length):
+                self.the_array[i+1] = an_array[i]
+                
+            # heapify every parent
+            for i in range(max_size//2,0,-1):
+                self.sink(i)
 
     def __len__(self) -> int:
         return self.length
@@ -26,7 +40,7 @@ class MaxHeap(Generic[T]):
         :pre: 1 <= k <= self.length
         """
         item = self.the_array[k]
-        while k > 1 and item > self.the_array[k // 2]:
+        while k > 1 and item[0] > self.the_array[k // 2][0]:
             self.the_array[k] = self.the_array[k // 2]
             k = k // 2
         self.the_array[k] = item
@@ -49,7 +63,7 @@ class MaxHeap(Generic[T]):
         """
         
         if 2 * k == self.length or \
-                self.the_array[2 * k] > self.the_array[2 * k + 1]:
+                self.the_array[2 * k][0] > self.the_array[2 * k + 1][0]:
             return 2 * k
         else:
             return 2 * k + 1
@@ -63,7 +77,7 @@ class MaxHeap(Generic[T]):
 
         while 2 * k <= self.length:
             max_child = self.largest_child(k)
-            if self.the_array[max_child] <= item:
+            if self.the_array[max_child][0] <= item[0]:
                 break
             self.the_array[k] = self.the_array[max_child]
             k = max_child
