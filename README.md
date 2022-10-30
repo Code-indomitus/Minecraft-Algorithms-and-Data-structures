@@ -10,23 +10,24 @@ Project Repository for use in Assignment 3
 - Shyam Kamalesh Borkar (sbor0018@student.monash.edu)
 
 ## Implement the Set up!
-- [ ] hash_table.py
-- [ ] primes.py
-- [ ] bst.py
+- [X] hash_table.py
+- [X] primes.py
+- [X] bst.py
 - [ ] avl.py
 
 ## Implement the Game!
 - [ ] trader.py
 - [ ] player.py
-- [ ] material.py
-- [ ] cave.py
+- [X] material.py
+- [X] cave.py
+- [X] food.py
 - [ ] game.py
 
 
 ## Complete Documentation!
 - [ ] hash_table.py
-- [ ] primes.py
-- [ ] bst.py
+- [X] primes.py
+- [X] bst.py
 - [ ] avl.py
 - [ ] trader.py
 - [ ] player.py
