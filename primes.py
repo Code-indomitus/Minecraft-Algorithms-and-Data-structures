@@ -27,7 +27,7 @@ class LargestPrimeIterator():
     
     def __next__(self):
         """Magic method to get the next item in the iterable object
-        :complexity: Best and worst case O(1)
+        :complexity: Best and worst case = O(largest_prime()) that is O(n^2)
         """
         new_prime = self.largest_prime(self.upper_bound)
         self.upper_bound = new_prime * self.factor

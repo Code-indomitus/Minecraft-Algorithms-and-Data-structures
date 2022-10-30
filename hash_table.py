@@ -5,7 +5,7 @@ Defines a Hash Table using Linear Probing for conflict resolution.
 from __future__ import annotations
 from primes import LargestPrimeIterator
 
-__author__ = 'Brendon Taylor. Modified by Graeme Gange, Alexey Ignatiev, and Jackson Goerner'
+__author__ = 'Brendon Taylor. Modified by Graeme Gange, Alexey Ignatiev, Jackson Goerner , Tan Jun Yu'
 __docformat__ = 'reStructuredText'
 __modified__ = '21/05/2020'
 __since__ = '14/05/2020'
@@ -14,6 +14,7 @@ __since__ = '14/05/2020'
 from referential_array import ArrayR
 from typing import TypeVar, Generic
 T = TypeVar('T')
+
 
 
 class LinearProbeTable(Generic[T]):
@@ -29,6 +30,9 @@ class LinearProbeTable(Generic[T]):
     def check_prime(self,num : int) -> bool:
         '''
         Function to check if the num is prime . Returns True or False
+        :param num : the number to be checked if it is prime or not 
+        :complexity: best : O(1) when num is less than or equal to 1
+                     worst: O(N) where N is num since the for loop is depending on the num 
         '''
         if num > 1:
         # Iterate from 2 to n / 2
@@ -67,7 +71,7 @@ class LinearProbeTable(Generic[T]):
         
         self.table = ArrayR(self.tablesize)
 
-        
+        # Values to return when statistics method is called
         self.conflict = 0   
         self.total_distance_probed = 0
         self.length_longest_probe = 0
@@ -76,8 +80,9 @@ class LinearProbeTable(Generic[T]):
 
     def hash(self, key: str) -> int:
         """
-            Hash a key for insertion into the hashtable.
-            Time complexity : Best Case = Worst Case = O(len(key))
+        Hash a key for insertion into the hashtable.
+        :param key : the key to hash
+        :Time complexity : Best Case = Worst Case = O(len(key))
         """
         value = 0
         a = 31415
@@ -89,6 +94,10 @@ class LinearProbeTable(Generic[T]):
         return value
 
     def statistics(self) -> tuple:
+        """
+        Return the number of conflicts,total distance probed,length of longest probe and number of times the table is rehashed
+        :Time complexity : Best Case = Worst Case = O(1)
+        """
         return (self.conflict,self.total_distance_probed,self.length_longest_probe,self.rehashing_count)
 
     def __len__(self) -> int:
@@ -224,7 +233,8 @@ class LinearProbeTable(Generic[T]):
     def _rehash(self) -> None:
         """
             Need to resize table and reinsert all values
-            Time complexity : Best = Worst = O(len(self.table) + len(self.table) + next() ) 
+            Time complexity : Best = Worst = O(len(self.table) + len(self.table) + next() ) where O(next) is O(n^2). 
+            Thus overall complexity is  O(len(self.table) + len(self.table) + O(n^2)) where n is the value of self.tablesize
         """
         self.rehashing_count += 1
         self.count = 0

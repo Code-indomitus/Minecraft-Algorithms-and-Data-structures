@@ -233,7 +233,8 @@ class BinarySearchTree(Generic[K, I]):
         '''
         Find the node with the maximum key and delete that node before returning it
         Used in : select_food_and_cave method of Player class
-        :complexity : Worst: O(Depth) + O(delete) where O(delete) is also O(Depth). Thus, worst-case complexity is O(Depth)
+        :complexity : Worst: O(Depth) + O(delete) where O(delete) is also O(Depth). Thus, worst-case complexity is O(Depth). O(log n) for balanced tree and O(n) for unbalanced tree
+                            where n is the number of nodes.
                       Best: O(1)
         '''
         return self.find_max_and_remove_aux(self.root)
@@ -242,7 +243,8 @@ class BinarySearchTree(Generic[K, I]):
         '''
         Auxilliary function to find the max node and remove it.
         :param current: the current node of the tree
-        :complexity : Worst: O(Depth) + O(delete) where O(delete) is also O(Depth). Thus, worst-case complexity is O(Depth)
+        :complexity : Worst: O(Depth) + O(delete) where O(delete) is also O(Depth). Thus, worst-case complexity is O(Depth). O(log n) for balanced tree and O(n) for unbalanced tree
+                            where n is the number of nodes.
                       Best: O(1)
         '''
         
