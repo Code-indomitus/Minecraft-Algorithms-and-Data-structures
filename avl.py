@@ -202,21 +202,26 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
         return sorted_list[i:j + 1]
 
     def in_order(self, current: AVLTreeNode) -> List:
-        """ Method to traverse with inorder throught the avl tree
+        """ Recursive method to traverse with inorder through the avl tree
         :param current: the current node of the avl tree
         :returns: a sorted list of all the items of the tree (sorted based on key values)
         :complexity: Best and worst is O(n) where n is the number of nodes in the avl tree
         """
         sorted_list = []
-        stack = []
-
-        while stack or current:
-            if current:
-                stack.append(current)
-                current = current.left
-            else:
-                node = stack.pop()
-                sorted_list.append(node.item)
-                current = node.right
-        
+        self.in_order_aux(current, sorted_list)
         return sorted_list
+    
+    def in_order_aux(self, current: AVLTreeNode, sorted_list: List) -> List:
+        """ Auxilliary Method to traverse with inorder through the avl tree
+        :param current: the current node of the avl tree
+        :returns: a sorted list of all the items of the tree (sorted based on key values)
+        :complexity: Best and worst is O(n) where n is the number of nodes in the avl tree
+        """
+        if current is None:
+            return
+
+        self.in_order_aux(current.left, sorted_list)
+        sorted_list.append(current.item)
+        self.in_order_aux(current.right, sorted_list)
+        return
+
