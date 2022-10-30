@@ -1,5 +1,7 @@
 from __future__ import annotations
+from multiprocessing.heap import Heap
 from constants import EPSILON
+from heap import MaxHeap
 
 from player import Player
 from trader import HardTrader, RandomTrader, RangeTrader, Trader
@@ -25,9 +27,6 @@ class Game:
 
 
     def __init__(self) -> None:
-        #TODO
-        #is this supposed to be a hash table?
-        #but getters return a list
         self.materials = []
         self.caves = [] 
         self.traders = []
@@ -298,12 +297,12 @@ class MultiplayerGame(Game):
         food_selected = []
         balance = []
         visited_caves = []
+        cave_emerald_returns = []
 
-        for cave in self.caves:
-            cave.set_temp_quantity(cave.quantity)
-            cave.material.current_best_price_for_sold = None
+        for material in self.materials: #O(M)
+            material.current_best_price_for_sold = None
 
-        # Find the emerald per hunger bar of each material .This is to identify which are the better caves to go for mining 
+        # Find the emerald per hunger bar of each material. This is to identify which are the better caves to go for mining
         for trader in self.traders: # O(T)
             current_deal = trader.current_deal() 
             trader_material = current_deal[0]
@@ -311,9 +310,20 @@ class MultiplayerGame(Game):
 
             trader_material.set_current_best_price_for_sold(material_price)
 
-        most_optimal_cave = None
+        for cave in self.caves: #O(C)
+            
+            cave.set_temp_quantity(cave.quantity)
+            if cave.material.get_current_best_price_for_sold() is None:
+                continue
 
-        for player in self.players:
+            cave_emerald_return, mined_quantity = self.calculate_cave_returns(cave, food)
+            cave.set_mined_quantity(mined_quantity)
+            cave_emerald_returns.append((cave_emerald_return, cave))
+
+        caves_heap = MaxHeap(len(cave_emerald_returns), cave_emerald_returns) #O(C)
+
+
+        for player in self.players: #O(P)
             if player.balance < food.price - EPSILON:
                 food_selected.append(None)
                 balance.append(player.balance)
@@ -324,28 +334,21 @@ class MultiplayerGame(Game):
                 food_selected.append(food)
                 temp_balance -= food.price
 
-                opt_return = 0
-                opt_mined_quantity = 0
+                #opt_return = 0
+                
+                best_cave_return = caves_heap.get_max() #O(log C)
+                opt_emerald_return = best_cave_return[0]
+                most_optimal_cave = best_cave_return[1]
+                opt_mined_quantity = most_optimal_cave.get_mined_quantity()
 
-                for cave in self.caves:
-
-                    if cave.material.get_current_best_price_for_sold() is None:
-                        continue
-                    
-                    #opt_return, opt_mined_quantity = self.calculate_cave_returns(most_optimal_cave, food)
-                    new_return, new_mined_quantity = self.calculate_cave_returns(cave, food)
-
-                    #comparing the emerald returns
-                    if opt_return < new_return - EPSILON:
-                        most_optimal_cave = cave
-                        opt_mined_quantity = new_mined_quantity
-                        opt_return = new_return
-
-                temp_balance += opt_return
+                temp_balance += opt_emerald_return
                 balance.append(temp_balance)
-                    
+
                 visited_caves.append((most_optimal_cave, opt_mined_quantity))
-                most_optimal_cave.set_temp_quantity(cave.get_temp_quantity() - opt_mined_quantity)
+                most_optimal_cave.set_temp_quantity(most_optimal_cave.get_temp_quantity() - opt_mined_quantity)
+                new_emerald_return, new_mined_quantity = self.calculate_cave_returns(most_optimal_cave, food)
+                most_optimal_cave.set_mined_quantity(new_mined_quantity)
+                caves_heap.add((new_emerald_return, most_optimal_cave)) #O(log C)
         
         return food_selected, balance, visited_caves
 
@@ -378,9 +381,8 @@ class MultiplayerGame(Game):
                 if cave_tup[0].material.get_current_best_price_for_sold() is None:
                     raise ValueError("Material is not sold by any trader!")
                 
-                #TODO: REMOVE THIS SHIT!!!!!!!!!!
-                # if (cave_tup[0].get_quantity() < cave_tup[1] - EPSILON):
-                #     raise ValueError("Player is trying to mine more than the cave has to offer")
+                if (cave_tup[0].get_quantity() < cave_tup[1] - EPSILON):
+                    raise ValueError("Player is trying to mine more than the cave has to offer")
 
                 total_emeralds_collected = cave_tup[1] * cave_tup[0].material.get_current_best_price_for_sold()
                 
