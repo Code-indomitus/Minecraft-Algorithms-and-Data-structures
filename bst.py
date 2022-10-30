@@ -5,7 +5,7 @@
 
 from __future__ import annotations
 
-__author__ = 'Brendon Taylor, modified by Alexey Ignatiev, further modified by Jackson Goerner'
+__author__ = 'Brendon Taylor, modified by Alexey Ignatiev, further modified by Jackson Goerner and Shyam Kamalesh Borkar'
 __docformat__ = 'reStructuredText'
 
 from typing import TypeVar, Generic
