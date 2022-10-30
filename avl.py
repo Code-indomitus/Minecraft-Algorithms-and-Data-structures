@@ -1,6 +1,6 @@
 """ AVL Tree implemented on top of the standard BST. """
 
-__author__ = 'Alexey Ignatiev, with edits by Jackson Goerner'
+__author__ = 'Alexey Ignatiev, with edits by Jackson Goerner and Shyam Kamalesh Borkar'
 __docformat__ = 'reStructuredText'
 
 from bst import BinarySearchTree
@@ -192,23 +192,31 @@ class AVLTree(BinarySearchTree, Generic[K, I]):
 
         return current
 
-    #TODO: Documentation and complexity is not fulfilled for implementation
     def range_between(self, i: int, j: int) -> List:
         """
         Returns a sorted list of all elements in the tree between the ith and jth indices, inclusive.
-        
-        :complexity ...
+        :complexity: Best and worst is O(n) where n is the number of nodes in the avl tree
         """
 
         sorted_list = self.in_order(self.root)
         return sorted_list[i:j + 1]
 
     def in_order(self, current: AVLTreeNode) -> List:
+        """ Method to traverse with inorder throught the avl tree
+        :param current: the current node of the avl tree
+        :returns: a sorted list of all the items of the tree (sorted based on key values)
+        :complexity: Best and worst is O(n) where n is the number of nodes in the avl tree
+        """
         sorted_list = []
-        
-        if current:
-            sorted_list = self.in_order(current.left)
-            sorted_list.append(current.item)
-            sorted_list = sorted_list + self.in_order(current.right)
-        return sorted_list
+        stack = []
 
+        while stack or current:
+            if current:
+                stack.append(current)
+                current = current.left
+            else:
+                node = stack.pop()
+                sorted_list.append(node.item)
+                current = node.right
+        
+        return sorted_list
