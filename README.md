@@ -34,6 +34,6 @@ Project Repository for use in Assignment 3
 - [X] material.py
 - [X] cave.py
 - [X] food.py
-- [ ] game.py
+- [X] game.py
 
 - [X] Hash Table Analysis
