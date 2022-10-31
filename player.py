@@ -1,3 +1,5 @@
+""" All logic and implementation related to the player in the game can be found here"""
+
 from __future__ import annotations
 from aset import ASet
 from avl import AVLTree
@@ -96,6 +98,7 @@ PLAYER_NAMES = [
 ]
 
 class Player():
+    """Class that allows the creation of player objects in the game"""
 
     DEFAULT_EMERALDS = 50
 
@@ -105,6 +108,7 @@ class Player():
     def __init__(self, name, emeralds=None) -> None:
         '''
         Constructor for Player
+        :complexity: Best Case = Worst Case = O(1)
         '''
         self.name = name
         self.balance = self.DEFAULT_EMERALDS if emeralds is None else emeralds
@@ -116,6 +120,7 @@ class Player():
     def set_traders(self, traders_list: list[Trader]) -> None:
         '''
         Set the traders to the traders_list and also find the best deal among all the traders that are buying the same item.
+        :param traders_list: list of traders
         Time Complexity : Best Case = Worst Case = O(1)
         '''
         self.traders_list = traders_list
@@ -124,6 +129,7 @@ class Player():
     def set_foods(self, foods_list: list[Food]) -> None:
         '''
         Sets the player's food list
+        :param foods_list: list of foods
         Time Complexity : Best Case = Worst Case = O(1)
         '''
         self.food_list = foods_list
@@ -148,6 +154,7 @@ class Player():
     def set_materials(self, materials_list: list[Material]) -> None:
         '''
         Set the materials to the materials_list attribute of Player class
+        :param materials_list: list of materials
         Time Complexity : Best Case = Worst Case = O(1)
         '''
         self.materials_list = materials_list
@@ -155,6 +162,7 @@ class Player():
     def set_caves(self, caves_list: list[Cave]) -> None:
         '''
         Set the caves to the caves_list attribute of Player class
+        :param caves_list: list of caves
         Time Complexity : Best Case = Worst Case = O(1)
         '''
         self.caves_list = caves_list
