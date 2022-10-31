@@ -179,10 +179,10 @@ class Player():
         '''
         Complexity : Worst-Case complexity = Best-Case Complexity = O(M + T + F*( C*logC + C*logC )) = O(M + T + F*C*logC)
 
-        The first for loop is to iterate through the whole list of materials to reset the current_best_price_for_sold and emerald_per_hunger_bar attribute of the material
+        The first for loop (line 293) is to iterate through the whole list of materials to reset the current_best_price_for_sold and emerald_per_hunger_bar attribute of the material
         everytime this method select_food_and_caves() is called. This is to erase all the previously set values from the previous calls to this method. 
     
-        The second for loop is to iterate through the whole list of traders. At each iteration, the information in regards to the deal generated that is 
+        The second for loop (line 298) is to iterate through the whole list of traders. At each iteration, the information in regards to the deal generated that is 
         the material and the selling price of that material of that particular trader are retrieved. The price of that material is then set to to the current_best_price_for_sold 
         attribute of the material.If there is a case where two or more different traders are buying the same item, only the highest price among them will be set to the 
         current_best_price_for_sold attribute of the material. The emerald per hunger bar of each material is then calculated by using the current_best_price_for_sold of the material
@@ -190,10 +190,10 @@ class Player():
         per hunger bar should be prioritised more against other caves with materials of lower emerald per hunger bar. Emerald per hunger bar shows how many emeralds the player can obtain by
         selling the material for each hunger bar used when mining.  
 
-        The third for loop is the main loop to choose the best choice of food and caves that will leave the highest balance at the end of the day.There is an if statement to check
-        if the player has enough balance to buy the food.If not, the main loop will proceed to the next food.The first nested for loop inside this main loop is to insert every 
-        cave into an AVL tree which will sort the caves in accordance to the priority determined by the emerald per hunger bar of the material inside that cave. The second
-        for loop inside this main loop is to keep the game going. If the player's hunger bar is still not yet 0 , then the best cave which is the one that contains the material of the 
+        The third for loop (line 310) is the main loop to choose the best choice of food and caves that will leave the highest balance at the end of the day.There is an if statement to check
+        if the player has enough balance to buy the food.If not, the main loop will proceed to the next food.The first nested for loop (line 322) inside this main loop is to insert every 
+        cave into an AVL tree which will sort the caves in accordance to the priority determined by the emerald per hunger bar of the material inside that cave. The second nested
+        for loop (line 335) inside this main loop is to keep the game going. If the player's hunger bar is still not yet 0 , then the best cave which is the one that contains the material of the 
         highest emerald per hunger bar is retrieved from the AVL tree. Then, it will check if the player has enough hunger bar to mine the full quantity of material inside that cave. If no, 
         it will calculate the how much of the material can be mined by the player with the remaning hunger bar left. The balance of the player is then added with the price of selling
         by using the amount mined multiplied with the current_best_price_for_sold of that material.At the end of the loop, there is a if statement to check if the food bought at this iteration
