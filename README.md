@@ -16,12 +16,12 @@ Project Repository for use in Assignment 3
 - [X] avl.py
 
 ## Implement the Game!
-- [ ] trader.py
-- [ ] player.py
+- [X] trader.py
+- [X] player.py
 - [X] material.py
 - [X] cave.py
 - [X] food.py
-- [ ] game.py
+- [x] game.py
 
 
 ## Complete Documentation!
@@ -29,11 +29,11 @@ Project Repository for use in Assignment 3
 - [X] primes.py
 - [X] bst.py
 - [X] avl.py
-- [ ] trader.py
+- [X] trader.py
 - [ ] player.py
-- [ ] material.py
-- [ ] cave.py
-- [ ] food.py
+- [X] material.py
+- [X] cave.py
+- [X] food.py
 - [ ] game.py
 
-- [ ] Hash Table Analysis
+- [X] Hash Table Analysis

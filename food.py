@@ -1,4 +1,5 @@
 """ Food class that allows us to work with food objects in the game"""
+
 from __future__ import annotations
 from random import random
 
@@ -95,7 +96,8 @@ FOOD_NAMES = [
 ]
 
 class Food:
-    
+    """Class that allows the creation of food items in the game."""
+
     def __init__(self, name: str, hunger_bars: int, price: int) -> None:
         '''
         Constructor for Food

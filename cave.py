@@ -1,8 +1,9 @@
+""" File that contains all items related to caves in the game"""
 from __future__ import annotations
 
 from material import Material
 from random_gen import RandomGen
-__author__ = 'Tan Jun Yu'
+__author__ = "Tan Jun Yu, modified by Rachit Bhatia, Shyam Borkar"
 
 # List of cave names from https://en.uesp.net/wiki/Skyrim:Caves. Thanks Skyrim.
 CAVE_NAMES = [
@@ -99,6 +100,7 @@ CAVE_NAMES = [
 ]
 
 class Cave:
+    """ Class that represents a cave in the game"""
     
     def __init__(self, name: str, material: Material, quantity: float=0) -> None:
         '''
@@ -107,18 +109,21 @@ class Cave:
         1) name
         2) material 
         3) quantity of material currently mineable 
+        :complexity: best=worst= O(1)
         '''
 
-        self.name = name
-        self.material = material
-        self.quantity = quantity
-        self.temp_quantity = self.quantity
+        self.name = name    #name of the cave
+        self.material = material    #material inside the cave
+        self.quantity = quantity    #total quantity of material inside the cave
+        self.temp_quantity = self.quantity  #temporary quantity of material presemt inside the cave
+        self.mined_quantity = None  #the quantity of material mined by the players in the MultiPlayer Game
+
     
     def add_quantity(self, amount: float) -> None:
         '''
         Add an amount to the quantity of material
         :param amount : amount to add to the quantity of material inside the cave
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         self.quantity = self.quantity + amount
     
@@ -126,14 +131,14 @@ class Cave:
         '''
         Remove an amount from the quantity of material
         :param amount : amount to remove from the quantity of material inside the cave
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         self.quantity = self.quantity - amount
 
     def get_quantity(self) -> float:
         '''
         Return the quantity of material 
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         return self.quantity
     
@@ -141,14 +146,14 @@ class Cave:
         '''
         Set the temp_quantity of the material
         :param new_quantity : the new quantity to be set as the temp_quantity
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         self.temp_quantity = new_quantity
 
     def get_temp_quantity(self) -> float:
         '''
         Return the temp_quantity of the material
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         self.temp_quantit
         return self.temp_quantity
@@ -157,14 +162,32 @@ class Cave:
         '''
         Remove a certain amount from the temp_quantity of the material
         :param amount : amount to remove from the temp_quantity
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         self.temp_quantity = self.temp_quantity - amount
+
+    def set_mined_quantity(self, quantity: float) -> None:
+        """ 
+        Set the material quantity mined by the player.
+
+        :param quantity: the quantity of the material mined by the player
+        :complexity: Best-Case = Worst-Case = O(1) since it only involves an assignment operation
+        """
+        self.mined_quantity = quantity
+
+    def get_mined_quantity(self) -> float:
+        """ 
+        Return the material quantity mined by the player.
+
+        :returns: Quantity of material inside cave mined by the Player
+        :complexity: Best-Case = Worst-Case = O(1) since it only returns an attribute value
+        """
+        return self.mined_quantity
 
     def __str__(self) -> str:
         '''
         Return a string representing the cave and all its relevant information 
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         return "<Cave: {}. {} of [{}]>".format(self.name, str(self.quantity), str(self.material))
 
@@ -173,7 +196,7 @@ class Cave:
         '''
         Generate random cave using the material_list parameter
         :param material_list : list of materials to be chosen from 
-        :time complexity : best=worst= O(1)
+        :complexity : best=worst= O(1)
         '''
         random_name = RandomGen.random_choice(CAVE_NAMES)
         random_material = RandomGen.random_choice(material_list)
