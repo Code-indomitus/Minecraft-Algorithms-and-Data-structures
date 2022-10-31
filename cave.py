@@ -155,7 +155,6 @@ class Cave:
         Return the temp_quantity of the material
         :complexity : best=worst= O(1)
         '''
-        self.temp_quantit
         return self.temp_quantity
     
     def remove_temp_quantity(self, amount: float) -> None:

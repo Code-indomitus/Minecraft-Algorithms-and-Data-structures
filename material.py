@@ -1,7 +1,7 @@
 """ All items related to creating a material in the game can be found here"""
 
-from random import Random
 from random_gen import RandomGen
+from constants import EPSILON
 __author__ = 'Tan Jun Yu'
 # Material names taken from https://minecraft-archive.fandom.com/wiki/Items
 RANDOM_MATERIAL_NAMES = [
@@ -156,7 +156,7 @@ class Material:
         # If the material already has a price
         else:
             # Compare to see if the parameter value is greater than the current price. If it is greater, then set the parameter value as the current_best_price_for_sold
-            if abs(value) > self.current_best_price_for_sold :
+            if self.current_best_price_for_sold < value  - EPSILON  :
                 self.current_best_price_for_sold = value
 
     def get_current_best_price_for_sold(self):
