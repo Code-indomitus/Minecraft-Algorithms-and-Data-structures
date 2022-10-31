@@ -25,7 +25,7 @@ Project Repository for use in Assignment 3
 
 
 ## Complete Documentation!
-- [ ] hash_table.py
+- [X] hash_table.py
 - [X] primes.py
 - [X] bst.py
 - [X] avl.py
