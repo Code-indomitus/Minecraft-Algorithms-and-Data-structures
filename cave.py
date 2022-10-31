@@ -1,3 +1,4 @@
+""" File that contains all items related to caves in the game"""
 from __future__ import annotations
 
 from material import Material
@@ -99,6 +100,7 @@ CAVE_NAMES = [
 ]
 
 class Cave:
+    """ Class that represents a cave in the game"""
     
     def __init__(self, name: str, material: Material, quantity: float=0) -> None:
         '''
@@ -107,6 +109,7 @@ class Cave:
         1) name
         2) material 
         3) quantity of material currently mineable 
+        :complexity: best=worst= O(1)
         '''
 
         self.name = name    #name of the cave
