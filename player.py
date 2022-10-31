@@ -177,10 +177,19 @@ class Player():
 
     def select_food_and_caves(self) -> tuple[Food | None, float, list[tuple[Cave, float]]]:
         '''
-        Complexity : Worst-Case complexity = Best-Case Complexity = O(M + T + F*( C*logC + C*logC )) = O(M + T + F*C*logC)
+        Complexity : Worst-Case complexity = O(M + T + F*( C*logC + C*logC )) = O(M + T + F*C*logC)
+                     Best-Case complexity = O(M + T + F*C) 
 
-        The first for loop (line 293) is to iterate through the whole list of materials to reset the current_best_price_for_sold and emerald_per_hunger_bar attribute of the material
-        everytime this method select_food_and_caves() is called. This is to erase all the previously set values from the previous calls to this method. 
+        The worst complexity is O(M + T + F*C*logC). O(M) is from the first for loop that is iterating through the list of materials and inside the loop only consists of O(1) operations.
+        The same applies to O(T) that is from the second for loop iterating through the list of traders and inside the loop only consists of O(1) operations. O(F*C*log*C) is from 
+        the third for loop that iterates through the list of food O(F) and consists of two nested for loop of O(C*log C) where log C is from inserting and removing caves from the
+        AVL tree. 
+
+        The best case happens only when the operation of inserting the cave into the AVL tree is O(1) and also find_max_and_remove() function is O(1). These operations can be O(1)
+        if and only if the there is only 1 cave in self.caves.
+
+        Approach : The first for loop (line 293) is to iterate through the whole list of materials to reset the current_best_price_for_sold and emerald_per_hunger_bar attribute 
+        of the material everytime this method select_food_and_caves() is called. This is to erase all the previously set values from the previous calls to this method. 
     
         The second for loop (line 298) is to iterate through the whole list of traders. At each iteration, the information in regards to the deal generated that is 
         the material and the selling price of that material of that particular trader are retrieved. The price of that material is then set to to the current_best_price_for_sold 
@@ -200,10 +209,7 @@ class Player():
         has a greater balance than the previous food. If it is greater, then it will set this current food as the most optimal solution. This main loop is done repeatedly untill either the 
         player's hunger bar is 0 or all the caves are already finished mining.
 
-        The complexity is O(M + T + F*C*logC). O(M) is from the first for loop that is iterating through the list of materials and inside the loop only consists of O(1) operations.
-        The same applies to O(T) that is from the second for loop iterating through the list of traders and inside the loop only consists of O(1) operations. O(F*C*log*C) is from 
-        the third for loop that iterates through the list of food O(F) and consists of two nested for loop of O(C*log C) where log C is from inserting and removing caves form the
-        AVL tree. 
+        
 
         Example :
         Player("Hello",50)
