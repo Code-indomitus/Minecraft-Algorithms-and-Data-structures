@@ -30,7 +30,7 @@ Project Repository for use in Assignment 3
 - [X] bst.py
 - [X] avl.py
 - [X] trader.py
-- [ ] player.py
+- [X] player.py
 - [X] material.py
 - [X] cave.py
 - [X] food.py
