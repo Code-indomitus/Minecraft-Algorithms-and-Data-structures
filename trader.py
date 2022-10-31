@@ -1,4 +1,5 @@
 """ File that holds all code that creates the different types of traders in the game."""
+
 from __future__ import annotations
 
 from abc import abstractmethod, ABC
@@ -197,6 +198,8 @@ class Trader(ABC):
         return result
 
 class RandomTrader(Trader):
+    """ Class that represents a random trader in the game"""
+
     def __init__(self, name: str) -> None:
         """
         Constructor for random trader type
@@ -232,6 +235,8 @@ class RandomTrader(Trader):
         return RandomTrader(random_name)
 
 class RangeTrader(Trader):
+    """ Class that represents a range trader in the game"""
+
     def __init__(self, name: str) -> None:
         """
         Constructor for range trader type
@@ -284,6 +289,8 @@ class RangeTrader(Trader):
         return RangeTrader(random_name)
 
 class HardTrader(Trader):
+    """ Class that represents a hard trader in the game"""
+
     def __init__(self, name: str) -> None:
         """
         Constructor for hard trader type
@@ -299,7 +306,8 @@ class HardTrader(Trader):
         """
         Generating the deal of the material
 
-        :complexity: The best and worst case complexity is O(1).
+        :complexity: The best and worst case complexity is O(n) 
+        where n is the size of the inventory.
         """
 
         material_list = self.inventory.range_between(0, len(self.inventory) - 1)
