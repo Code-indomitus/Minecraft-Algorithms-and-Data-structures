@@ -1,3 +1,5 @@
+""" All items related to creating a material in the game can be found here"""
+
 from random import Random
 from random_gen import RandomGen
 __author__ = 'Tan Jun Yu'
@@ -87,9 +89,7 @@ RANDOM_MATERIAL_NAMES = [
 ]
 
 class Material:
-    """
-
-    """
+    """Class that aids the creation of Material objects in the game"""
     
     def __init__(self, name: str, mining_rate: float) -> None:
         '''
@@ -97,6 +97,7 @@ class Material:
         Attributes :
         1) name
         2) mining rate
+        :time complexity : best=worst= O(1)
         '''
         self.name = name
         self.mining_rate = mining_rate
